@@ -237,6 +237,7 @@ shape = SubResource("RectangleShape2D_1jxqw")
 
 [node name="PlayerCharacter" type="Sprite2D" parent="."]
 texture = ExtResource("1_4flbx")
+offset = Vector2(0, -6)
 hframes = 8
 vframes = 12
 frame = 16

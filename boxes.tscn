@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dhikk887yojmk"]
 
 [ext_resource type="Script" uid="uid://d8gvko434gbn" path="res://scripts/pushBox.gd" id="1_bld75"]
-[ext_resource type="Texture2D" uid="uid://cuva5yhtsneeq" path="res://assets/items and trap_animation/box_2/box_2_3.png" id="2_x7wj0"]
+[ext_resource type="Texture2D" uid="uid://cxn0k05mgd62y" path="res://assets/SciAssets/SciSpriteSheet.png" id="2_bld75"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lnu2h"]
 
@@ -16,9 +16,11 @@ scale = Vector2(0.7, 0.7)
 shape = SubResource("RectangleShape2D_lnu2h")
 
 [node name="Sprite2D" type="Sprite2D" parent="pushableBox"]
-position = Vector2(0, 0.4)
-scale = Vector2(1.5, 1.9)
-texture = ExtResource("2_x7wj0")
+position = Vector2(0, -4)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2_bld75")
+region_enabled = true
+region_rect = Rect2(16, 0, 16, 16)
 
 [node name="RayCast2D" type="RayCast2D" parent="pushableBox"]
 target_position = Vector2(0, -16)
