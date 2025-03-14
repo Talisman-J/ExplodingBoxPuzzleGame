@@ -6,8 +6,11 @@ var currPos = position
 var input_vector = Vector2.ZERO
 var moving = false # To lock movement until reaching tile
 var didMove = false
+var hasMoved = false
+var exploded = false
 var moves: Array = [] #Holds the position and the MOVECOUNT the box was moved on. 
 var initPos = position
+
 
 var MOVECOUNT : int = 0
 
@@ -21,15 +24,20 @@ const TILE_SIZE = 16
 func _ready():
 	var player = get_node("/root/Main/Player")
 	player.moveCountChange.connect(_on_moveCountChange)
+	initExplosionTimer()
 	
 func _on_moveCountChange(newMoveCount):
 	if newMoveCount < MOVECOUNT:
 		# Check undo for if position is there.
 		check_undo()
 		MOVECOUNT = newMoveCount
+		if hasMoved:
+			updateExplosionTimer(1)
 	else:
 		# Update for undo to be able to keep track of which move box was moved on. 
 		MOVECOUNT = newMoveCount
+		if hasMoved:
+			updateExplosionTimer(-1)
 	
 	
 func push_box(direction) -> bool:
@@ -52,6 +60,7 @@ func push_box(direction) -> bool:
 	return didMove
 
 func attempt_move(direction):
+	hasMoved = true
 	if didMove == true:
 		didMove = false #shitty code
 		
@@ -99,13 +108,40 @@ func check_undo():
 		currPos = initPos
 		self.position = initPos
 	
-func explosionTimer():
+@export var countdown : int = 5
+var tempCountdown = countdown
+func updateExplosionTimer(num):
 	# Timer variable decrements for each increment in MOVECOUNT. Increments for each decrement in MOVECOUNT. 
 	# When reaches 0, explode. Will not replay exploding animation when undoing.
-	# When negative returns to 1 (or 0 im bad at counting), replace the exploding box. 
-	pass
+	# When negative returns to 1 (or 0 im bad at counting), replace the exploding box.
+	
+	var textDisplay = $Label
+	tempCountdown += num
+	if exploded == true:
+		if tempCountdown >= 0:
+			self.visible = true
+			exploded = false
+	elif tempCountdown >= countdown:
+		tempCountdown = countdown
+		hasMoved = false
+	textDisplay.text = str(tempCountdown)
+	if tempCountdown == 0:
+		explode()
+		
+	
+	
+func initExplosionTimer():
+	# Inputs the proper value into the exploding box.
+	var textDisplay = $Label
+	textDisplay.text = str(countdown)
 		
 func explode():
+	self.visible = false
+	exploded = true
+	#Likely places to error: In the case that 2 objects are in 1 raycast
+	#Intended behaviour: Push back one first, then closest second. 
+	#Object exploded should be pushed back 2, whether they are on first or second tile exploded. This means different distance can be reached with corpse.
+	
 	#Shoot out raycast in 4 directions 32 px. Detect collisions with non walls. Break breakable walls. Kill player. Push playercorpse and boxes. 
 	
 #	Kill player

@@ -170,11 +170,11 @@ position = Vector2(64, 64)
 position = Vector2(112, 16)
 
 [node name="ExplodeBox" type="Node2D" parent="."]
-position = Vector2(-48, 0)
+position = Vector2(112, -16)
 
 [node name="explodingBox" type="CharacterBody2D" parent="ExplodeBox"]
-position = Vector2(-32, 0)
 script = ExtResource("4_lbhrr")
+metadata/exploded = false
 
 [node name="Sprite2D" type="Sprite2D" parent="ExplodeBox/explodingBox"]
 
@@ -182,8 +182,17 @@ script = ExtResource("4_lbhrr")
 scale = Vector2(0.7, 0.7)
 shape = SubResource("RectangleShape2D_lnu2h")
 
-[node name="RayCast2D" type="RayCast2D" parent="ExplodeBox/explodingBox"]
-target_position = Vector2(0, -16)
+[node name="RayCastUp" type="RayCast2D" parent="ExplodeBox/explodingBox"]
+target_position = Vector2(0, -32)
+
+[node name="RayCastRight" type="RayCast2D" parent="ExplodeBox/explodingBox"]
+target_position = Vector2(32, 0)
+
+[node name="RayCastDown" type="RayCast2D" parent="ExplodeBox/explodingBox"]
+target_position = Vector2(0, 32)
+
+[node name="RayCastLeft" type="RayCast2D" parent="ExplodeBox/explodingBox"]
+target_position = Vector2(-32, 0)
 
 [node name="Label" type="Label" parent="ExplodeBox/explodingBox"]
 offset_left = -6.0
@@ -195,3 +204,6 @@ text = "Null"
 horizontal_alignment = 1
 vertical_alignment = 1
 text_overrun_behavior = 1
+
+[node name="RayCast2D" type="RayCast2D" parent="ExplodeBox/explodingBox"]
+target_position = Vector2(0, -16)
