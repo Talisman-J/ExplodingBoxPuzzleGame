@@ -1,4 +1,4 @@
-class_name PushBox
+class_name ExplodeBox
 extends CharacterBody2D
 
 #var currPos = Vector2(0, 0)
@@ -53,15 +53,15 @@ func push_box(direction) -> bool:
 
 func attempt_move(direction):
 	if didMove == true:
-		didMove = false # shitty code
+		didMove = false #shitty code
 		
 	var target_pos = currPos + input_vector * TILE_SIZE
+	# You could add collision checks here if needed (e.g., walls)
 	if can_move_to(direction):
 		currPos = target_pos
 		moving = true # Lock until move completes
 		didMove = true
 		moves.append([position, MOVECOUNT])
-	
 	position = currPos
 	moving = false 
 
@@ -98,3 +98,28 @@ func check_undo():
 	if moves.size() == 0:
 		currPos = initPos
 		self.position = initPos
+	
+func explosionTimer():
+	# Timer variable decrements for each increment in MOVECOUNT. Increments for each decrement in MOVECOUNT. 
+	# When reaches 0, explode. Will not replay exploding animation when undoing.
+	# When negative returns to 1 (or 0 im bad at counting), replace the exploding box. 
+	pass
+		
+func explode():
+	#Shoot out raycast in 4 directions 32 px. Detect collisions with non walls. Break breakable walls. Kill player. Push playercorpse and boxes. 
+	
+#	Kill player
+#	Check if corpse can move.
+#	If can:
+		#Move corpse away from explosion one.
+		#Check if it can move again:
+			#If so move back again
+			#Save position of corpse in undo function. Only increment moves by one.
+		#If not:
+			#Save position of corpse in undo function. Only increment moves by one. 
+	
+	#This will require an exploding state for the box and the player. Uses raycast similar to just normal checks. If player, pushes. If not stops. If box, pushes. If not stops. 
+	#Have edge case for box hitting player into wall breaking wall killing player. Doesn't kill normally, just pushes. 
+	#When enemies show up many more edge cases. Player hit by enemy dies. 
+#	
+	pass

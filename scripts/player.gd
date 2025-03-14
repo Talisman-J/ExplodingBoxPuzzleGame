@@ -77,7 +77,7 @@ func can_move_to(checkPos) -> bool:
 		return true
 	else:
 		var collidedNode = ray.get_collider()
-		if collidedNode.name == "pushableBox":
+		if collidedNode.name == "pushableBox" or collidedNode.name == "explodingBox":
 			if collidedNode.push_box(checkPos):
 				return true
 		return false

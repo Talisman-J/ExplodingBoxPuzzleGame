@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=4 uid="uid://c4xmotgopwct"]
+[gd_scene load_steps=9 format=4 uid="uid://c4xmotgopwct"]
 
 [ext_resource type="Script" uid="uid://c3vwc6w5nc0qk" path="res://scripts/main.gd" id="1_yqjtg"]
 [ext_resource type="PackedScene" uid="uid://5lpa4tlr0djd" path="res://scenes/player.tscn" id="2_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://dhikk887yojmk" path="res://boxes.tscn" id="3_lnu2h"]
+[ext_resource type="Script" uid="uid://b0kel6566h4ks" path="res://scripts/explodeBox.gd" id="4_lbhrr"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_yqjtg"]
 load_path = "res://.godot/imported/Dungeon_Tileset.png-979c160fca999bf489f0c7d52b4b5e68.ctex"
@@ -140,6 +141,8 @@ texture = SubResource("CompressedTexture2D_yqjtg")
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_lnu2h")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lnu2h"]
+
 [node name="Main" type="Node2D"]
 script = ExtResource("1_yqjtg")
 
@@ -165,3 +168,30 @@ position = Vector2(64, 64)
 
 [node name="Boxes3" parent="." instance=ExtResource("3_lnu2h")]
 position = Vector2(112, 16)
+
+[node name="ExplodeBox" type="Node2D" parent="."]
+position = Vector2(-48, 0)
+
+[node name="explodingBox" type="CharacterBody2D" parent="ExplodeBox"]
+position = Vector2(-32, 0)
+script = ExtResource("4_lbhrr")
+
+[node name="Sprite2D" type="Sprite2D" parent="ExplodeBox/explodingBox"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExplodeBox/explodingBox"]
+scale = Vector2(0.7, 0.7)
+shape = SubResource("RectangleShape2D_lnu2h")
+
+[node name="RayCast2D" type="RayCast2D" parent="ExplodeBox/explodingBox"]
+target_position = Vector2(0, -16)
+
+[node name="Label" type="Label" parent="ExplodeBox/explodingBox"]
+offset_left = -6.0
+offset_top = -4.0
+offset_right = 26.0
+offset_bottom = 19.0
+scale = Vector2(0.366483, 0.388122)
+text = "Null"
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 1
