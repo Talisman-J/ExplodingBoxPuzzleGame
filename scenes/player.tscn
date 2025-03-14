@@ -1,0 +1,258 @@
+[gd_scene load_steps=25 format=3 uid="uid://5lpa4tlr0djd"]
+
+[ext_resource type="Texture2D" uid="uid://bqtn7d8rukmxy" path="res://assets/Small-8-Direction-Characters_by_AxulArt/Small-8-Direction-Characters_by_AxulArt.png" id="1_4flbx"]
+[ext_resource type="Script" uid="uid://ci504nd1ok6wl" path="res://scripts/player.gd" id="1_g2els"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1jxqw"]
+
+[sub_resource type="Animation" id="Animation_g2els"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../PlayerCharacter:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(0, 2)]
+}
+
+[sub_resource type="Animation" id="Animation_qlg0r"]
+resource_name = "idle_down"
+length = 0.1
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../PlayerCharacter:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(4, 2)]
+}
+
+[sub_resource type="Animation" id="Animation_tuyoq"]
+resource_name = "idle_left"
+length = 0.1
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../PlayerCharacter:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(6, 2)]
+}
+
+[sub_resource type="Animation" id="Animation_dqkch"]
+resource_name = "idle_right"
+length = 0.1
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../PlayerCharacter:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(2, 2)]
+}
+
+[sub_resource type="Animation" id="Animation_qhqgy"]
+resource_name = "idle_up"
+length = 0.1
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../PlayerCharacter:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(0, 2)]
+}
+
+[sub_resource type="Animation" id="Animation_ur7pv"]
+resource_name = "walk_down"
+length = 0.3
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../PlayerCharacter:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Vector2i(4, 3), Vector2i(4, 2), Vector2i(4, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_y4r1p"]
+resource_name = "walk_left"
+length = 0.3
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../PlayerCharacter:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Vector2i(6, 3), Vector2i(6, 2), Vector2i(6, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_smehm"]
+resource_name = "walk_right"
+length = 0.3
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../PlayerCharacter:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Vector2i(2, 3), Vector2i(2, 2), Vector2i(2, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_fjrip"]
+resource_name = "walk_up"
+length = 0.3
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../PlayerCharacter:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Vector2i(0, 3), Vector2i(0, 2), Vector2i(0, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_d2wvv"]
+_data = {
+&"RESET": SubResource("Animation_g2els"),
+&"idle_down": SubResource("Animation_qlg0r"),
+&"idle_left": SubResource("Animation_tuyoq"),
+&"idle_right": SubResource("Animation_dqkch"),
+&"idle_up": SubResource("Animation_qhqgy"),
+&"walk_down": SubResource("Animation_ur7pv"),
+&"walk_left": SubResource("Animation_y4r1p"),
+&"walk_right": SubResource("Animation_smehm"),
+&"walk_up": SubResource("Animation_fjrip")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3v2ag"]
+animation = &"idle_down"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jej6c"]
+animation = &"idle_up"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_f1ej7"]
+animation = &"idle_left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_oprun"]
+animation = &"idle_right"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_a8ls1"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_3v2ag")
+blend_point_0/pos = Vector2(0, 0.9)
+blend_point_1/node = SubResource("AnimationNodeAnimation_jej6c")
+blend_point_1/pos = Vector2(0, -1)
+blend_point_2/node = SubResource("AnimationNodeAnimation_f1ej7")
+blend_point_2/pos = Vector2(-1, 0)
+blend_point_3/node = SubResource("AnimationNodeAnimation_oprun")
+blend_point_3/pos = Vector2(1, 0)
+blend_mode = 1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qfm1y"]
+animation = &"walk_down"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_fulsm"]
+animation = &"walk_right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4r5pv"]
+animation = &"walk_up"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_60mlk"]
+animation = &"walk_left"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_i4ail"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_qfm1y")
+blend_point_0/pos = Vector2(0, 1)
+blend_point_1/node = SubResource("AnimationNodeAnimation_fulsm")
+blend_point_1/pos = Vector2(1, 0)
+blend_point_2/node = SubResource("AnimationNodeAnimation_4r5pv")
+blend_point_2/pos = Vector2(0, -0.8)
+blend_point_3/node = SubResource("AnimationNodeAnimation_60mlk")
+blend_point_3/pos = Vector2(-1, 0)
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_3vyb7"]
+states/Idle/node = SubResource("AnimationNodeBlendSpace2D_a8ls1")
+states/Idle/position = Vector2(529, 130)
+states/Walk/node = SubResource("AnimationNodeBlendSpace2D_i4ail")
+states/Walk/position = Vector2(376, 130)
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_g2els")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(0.7, 0.7)
+shape = SubResource("RectangleShape2D_1jxqw")
+
+[node name="PlayerCharacter" type="Sprite2D" parent="."]
+texture = ExtResource("1_4flbx")
+hframes = 8
+vframes = 12
+frame = 16
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../AnimationTree")
+libraries = {
+&"": SubResource("AnimationLibrary_d2wvv")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath(".")
+tree_root = SubResource("AnimationNodeStateMachine_3vyb7")
+anim_player = NodePath("../AnimationPlayer")
+parameters/Idle/blend_position = Vector2(0.990909, 0)
+parameters/Walk/blend_position = Vector2(-0.993182, 0.0142858)
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+target_position = Vector2(0, -16)
