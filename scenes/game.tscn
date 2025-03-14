@@ -161,4 +161,7 @@ tile_set = SubResource("TileSet_lbhrr")
 [node name="Boxes" parent="." instance=ExtResource("3_lnu2h")]
 
 [node name="Boxes2" parent="." instance=ExtResource("3_lnu2h")]
-position = Vector2(64, 0)
+position = Vector2(64, 64)
+
+[node name="Boxes3" parent="." instance=ExtResource("3_lnu2h")]
+position = Vector2(112, 16)

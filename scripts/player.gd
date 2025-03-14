@@ -5,8 +5,10 @@ extends CharacterBody2D
 var currPos = Vector2(0, 0)
 var input_vector = Vector2.ZERO
 var moving = false # To lock movement until reaching tile
-#var moves: Array[Vector2] = []
-var moves: Array = []
+var moves: Array = [] # Holds the location of each move and which direction the player was facing at the time. 
+static var MOVECOUNT : int = 0
+
+signal moveCountChange(newMoveCount)
 
 @onready var ray = $RayCast2D
 
@@ -43,6 +45,8 @@ func attempt_move(direction):
 		update_animation_parameters()
 	position = currPos
 	moves.append([position, input_vector])
+	MOVECOUNT += 1
+	moveCountChange.emit(MOVECOUNT)
 	moving = false 
 	update_animation_parameters()
 	
@@ -80,8 +84,12 @@ func can_move_to(checkPos) -> bool:
 		
 		
 func undo():
-	# TODO: Rotate the player properly. Add functionality for other objects. To do this could have 2d array [position, facing]
+	#TODO: Undo should reset each time a new room is entered so as not to build up way too much data. Set return point to where new room is entered
 	
+	#TODO: In order to handle wall breaks, create a new object where broken wall is that increments for each move. Decrements for each undo. When reaches 0, replace wall. 
+	#Same can be done for exploding blocks and any other blocks that get removed. Corpses will be similar to boxes. 
+	
+	#TODO: Make other objects undo also. 
 	# -Maybe just give each object a position array. Seems like it would get laggy quick though. 
 	# -Different solution have marker points that do diff things so basically only has to know when and what happened but not where. 
 	# Would get out of hand with how many things can happen though especially in all 4 direcions... 
@@ -94,6 +102,8 @@ func undo():
 		#currPos = moves.get(moves.size() - 1)
 		currPos = currListItem.get(0)
 		input_vector = currListItem.get(1)
+		MOVECOUNT -= 1
+		moveCountChange.emit(MOVECOUNT)
 		
 		print(currPos)
 		print("Position", (position), " - currPos = ", position - currPos)
@@ -104,9 +114,13 @@ func undo():
 		self.position += (- position)
 		currPos = position
 		moves.pop_back()
+		# Resets input_vector. For some reason When game first starts, player is facing upwards instead of like this.
 		input_vector = Vector2.ZERO
+		MOVECOUNT -= 1
+		moveCountChange.emit(MOVECOUNT)
 	else:
 		print("This ran")
 		print(currPos)
+		print(MOVECOUNT)
 
 	pass
