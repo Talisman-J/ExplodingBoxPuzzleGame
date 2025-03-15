@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://cmci153vr4utt"]
+
+[ext_resource type="Script" uid="uid://dbudygrmr7xxi" path="res://scripts/explodeWall.gd" id="1_xtk2f"]
+[ext_resource type="Texture2D" uid="uid://cxn0k05mgd62y" path="res://assets/SciAssets/SciSpriteSheet.png" id="2_wvwin"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iywne"]
+
+[node name="ExplodeWall" type="Node2D"]
+
+[node name="ExplodableWall" type="CharacterBody2D" parent="." groups=["ExplodingWall"]]
+collision_layer = 4
+collision_mask = 4
+script = ExtResource("1_xtk2f")
+
+[node name="Sprite2D" type="Sprite2D" parent="ExplodableWall"]
+texture = ExtResource("2_wvwin")
+region_enabled = true
+region_rect = Rect2(80, 64, 16, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExplodableWall"]
+scale = Vector2(0.7, 0.7)
+shape = SubResource("RectangleShape2D_iywne")

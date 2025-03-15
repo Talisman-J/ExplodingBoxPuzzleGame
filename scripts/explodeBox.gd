@@ -15,14 +15,13 @@ var initPos = position
 var MOVECOUNT : int = 0
 
 
-
+@onready var player = get_node("/root/Main/Player")
 @onready var ray = $RayCast2D
 
 # Size of tile (adjust as needed)
 const TILE_SIZE = 16
 
 func _ready():
-	var player = get_node("/root/Main/Player")
 	player.moveCountChange.connect(_on_moveCountChange)
 	initExplosionTimer()
 	
@@ -114,12 +113,12 @@ func updateExplosionTimer(num):
 	# Timer variable decrements for each increment in MOVECOUNT. Increments for each decrement in MOVECOUNT. 
 	# When reaches 0, explode. Will not replay exploding animation when undoing.
 	# When negative returns to 1 (or 0 im bad at counting), replace the exploding box.
-	
 	var textDisplay = $Label
 	tempCountdown += num
 	if exploded == true:
 		if tempCountdown >= 0:
 			self.visible = true
+			$CollisionShape2D.disabled = false
 			exploded = false
 	elif tempCountdown >= countdown:
 		tempCountdown = countdown
@@ -127,22 +126,53 @@ func updateExplosionTimer(num):
 	textDisplay.text = str(tempCountdown)
 	if tempCountdown == 0:
 		explode()
-		
-	
-	
+
 func initExplosionTimer():
 	# Inputs the proper value into the exploding box.
 	var textDisplay = $Label
 	textDisplay.text = str(countdown)
-		
+
+
+
+
 func explode():
-	self.visible = false
-	exploded = true
+	if !exploded:
+		self.visible = false
+		exploded = true
+		$CollisionShape2D.disabled = true
+	
+	
+		var expRad = $ExplosionRadius
+		var angleDir
+		player.setMoving(true)
+		for input in inputs:
+			expRad.clear_exceptions()
+			expRad.force_raycast_update()
+			angleDir = inputs[input].angle()
+			expRad.rotation = angleDir + PI/2
+			expRad.force_raycast_update()
+			
+			var hitObjects = []
+			for i in range(2): # limit attempts to prevent infinite loop
+				expRad.force_raycast_update()
+				if expRad.is_colliding():
+					var obj = expRad.get_collider()
+					hitObjects.append(obj)
+					expRad.add_exception(obj) # avoid hitting it again
+				else:
+					break
+			for object in hitObjects:
+				object.explode() #Make sure this is implemented in every object. Might want to add direction param
+		player.setMoving(false)
+		
 	#Likely places to error: In the case that 2 objects are in 1 raycast
 	#Intended behaviour: Push back one first, then closest second. 
 	#Object exploded should be pushed back 2, whether they are on first or second tile exploded. This means different distance can be reached with corpse.
 	
+	
 	#Shoot out raycast in 4 directions 32 px. Detect collisions with non walls. Break breakable walls. Kill player. Push playercorpse and boxes. 
+	
+	#set_cell
 	
 #	Kill player
 #	Check if corpse can move.
@@ -159,3 +189,15 @@ func explode():
 	#When enemies show up many more edge cases. Player hit by enemy dies. 
 #	
 	pass
+
+
+func _on_explosion_radius_area_entered(area: Area2D):
+	print("Area entered:", area.name)
+	if area.is_in_group("ExplodingBoxArea"):
+		print("Exploding box is in area")
+	if area.is_in_group("Box"):
+		print("Box is in area")
+	if area.is_in_group("PlayerBody"):
+		print("Player is in area")
+	if area.is_in_group("ExplodingWall"):
+		print("Exploding wall is in area")

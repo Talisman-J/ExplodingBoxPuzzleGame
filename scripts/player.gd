@@ -4,9 +4,12 @@ extends CharacterBody2D
 
 var currPos = Vector2(0, 0)
 var input_vector = Vector2.ZERO
-var moving = false # To lock movement until reaching tile
+var moving : bool = false # To lock movement until reaching tile
 var moves: Array = [] # Holds the location of each move and which direction the player was facing at the time. 
 static var MOVECOUNT : int = 0
+
+func setMoving(value):
+	moving = value
 
 signal moveCountChange(newMoveCount)
 
@@ -97,20 +100,14 @@ func undo():
 	if moves.size() > 1:
 		#Pop the back and set player position to the new back. 
 		moves.pop_back()
-		print(currPos)
 		var currListItem = moves.get(moves.size() - 1)
-		#currPos = moves.get(moves.size() - 1)
 		currPos = currListItem.get(0)
 		input_vector = currListItem.get(1)
 		MOVECOUNT -= 1
 		moveCountChange.emit(MOVECOUNT)
-		
-		print(currPos)
-		print("Position", (position), " - currPos = ", position - currPos)
 		self.position += (currPos - position)
 	elif moves.size() == 1:
 		# In the case of only one move being taken, doesn't try to go out of bounds. 
-		print("\nPrinting position", position)
 		self.position += (- position)
 		currPos = position
 		moves.pop_back()
@@ -118,9 +115,7 @@ func undo():
 		input_vector = Vector2.ZERO
 		MOVECOUNT -= 1
 		moveCountChange.emit(MOVECOUNT)
-	else:
-		print("This ran")
-		print(currPos)
-		print(MOVECOUNT)
-
+		
+func explode():
+	print("Player Blew UP")
 	pass

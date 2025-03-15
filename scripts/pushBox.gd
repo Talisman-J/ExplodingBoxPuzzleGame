@@ -98,3 +98,7 @@ func check_undo():
 	if moves.size() == 0:
 		currPos = initPos
 		self.position = initPos
+
+func explode():
+	print("Box Blew UP")
+	pass
