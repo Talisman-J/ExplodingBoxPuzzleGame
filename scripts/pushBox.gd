@@ -8,8 +8,9 @@ var moving = false # To lock movement until reaching tile
 var didMove = false
 var moves: Array = [] #Holds the position and the MOVECOUNT the box was moved on. 
 var initPos = position
+var gettingPushed = false
 
-var exploding = false
+
 var MOVECOUNT : int = 0
 
 var worked = false
@@ -21,6 +22,7 @@ const TILE_SIZE = 16
 @onready var player = get_node("/root/Main/Player")
 func _ready():
 	player.moveCountChange.connect(_on_moveCountChange)
+	moves.append([position, 0])
 	
 func _on_moveCountChange(newMoveCount):
 	if newMoveCount <= MOVECOUNT:
@@ -36,7 +38,7 @@ func _on_moveCountChange(newMoveCount):
 func push_box(direction) -> bool:
 	if moving:
 		return didMove # Prevent new movement until done with current one
-
+	
 	# Only react to key presses (no continuous movement)
 	if direction == "right":
 		input_vector = Vector2(1, 0)
@@ -50,6 +52,32 @@ func push_box(direction) -> bool:
 	elif direction == "down":
 		input_vector = Vector2(0, 1)
 		attempt_move("down")
+		
+	
+	return didMove
+
+#Handles if the box is pushed during an explosion
+func push_other(direction) -> bool:
+	if moving:
+		return didMove # Prevent new movement until done with current one
+	gettingPushed = true
+	moves.append([position, MOVECOUNT - 1])
+	# Only react to key presses (no continuous movement)
+	if direction == "right":
+		input_vector = Vector2(1, 0)
+		attempt_move("right")
+	elif direction == "left":
+		input_vector = Vector2(-1, 0)
+		attempt_move("left")
+	elif direction == "up":
+		input_vector = Vector2(0, -1)
+		attempt_move("up")
+	elif direction == "down":
+		input_vector = Vector2(0, 1)
+		attempt_move("down")
+	gettingPushed = false
+	
+	#moves.append([position, MOVECOUNT])
 	return didMove
 
 func attempt_move(direction):
@@ -61,12 +89,13 @@ func attempt_move(direction):
 		currPos = target_pos
 		moving = true # Lock until move completes
 		didMove = true
-		#if !exploding:
 		print("This ran")
-		moves.append([position, MOVECOUNT])
-		#moves.append([position, MOVECOUNT])
 		position = currPos
+		moves.append([position, MOVECOUNT])
 		worked = true
+		if gettingPushed == true:
+			print("THIS RAN")
+			moves.pop_back()
 	else:
 		worked = false
 	moving = false 
@@ -86,6 +115,10 @@ func can_move_to(checkPos) -> bool:
 	if !ray.is_colliding():
 		return true
 	else:
+		var collidedNode = ray.get_collider()
+		if collidedNode.name == "pushableBox" or (collidedNode.name == "explodingBox") or collidedNode.name == "Player":
+			if collidedNode.push_other(checkPos):
+				return true
 		return false
 
 
@@ -112,7 +145,7 @@ func check_undo():
 
 
 func explode(dir):
-	exploding = true
+	
 	print(dir)
 	if moves.size() <= 0:
 		moves.append([position, MOVECOUNT - 1])
@@ -130,7 +163,7 @@ func explode(dir):
 		moves.pop_back()
 	print(MOVECOUNT, " Movecount and ", position, " Position" )
 	print("Box Blew UP")
-	exploding = false
+	
 	
 	#reference instance at countdown of 1 instead of 0. Return to 1 when countdown returns to 1
 	

@@ -8,6 +8,9 @@ var moving : bool = false # To lock movement until reaching tile
 var moves: Array = [] # Holds the location of each move and which direction the player was facing at the time. 
 static var MOVECOUNT : int = 0
 var exploding = false
+var gettingPushed = false
+
+var didMove = false
 
 func setMovingTrue():
 	moving = true
@@ -45,6 +48,30 @@ func _unhandled_input(event):
 			undo()
 		update_animation_parameters()
 
+#In case box explodes into player
+func push_other(direction) -> bool:
+	if moving:
+		return didMove # Prevent new movement until done with current one
+	gettingPushed = true
+	# Only react to key presses (no continuous movement)
+	if direction == "right":
+		input_vector = Vector2(1, 0)
+		attempt_move("right")
+	elif direction == "left":
+		input_vector = Vector2(-1, 0)
+		attempt_move("left")
+	elif direction == "up":
+		input_vector = Vector2(0, -1)
+		attempt_move("up")
+	elif direction == "down":
+		input_vector = Vector2(0, 1)
+		attempt_move("down")
+	gettingPushed = false
+	moves.pop_back()
+	moves.append([position, input_vector])
+	return didMove
+
+
 func attempt_move(direction):
 	var target_pos = currPos + input_vector * TILE_SIZE
 	
@@ -52,9 +79,10 @@ func attempt_move(direction):
 		currPos = target_pos
 		setMovingTrue() # Lock until move completes
 		position = currPos
-	moves.append([position, input_vector])
-	MOVECOUNT += 1
-	moveCountChange.emit(MOVECOUNT)
+	if gettingPushed == false:
+		moves.append([position, input_vector])
+		MOVECOUNT += 1
+		moveCountChange.emit(MOVECOUNT)
 	update_animation_parameters()
 	if !exploding:
 		setMovingFalse()

@@ -91,4 +91,7 @@ position = Vector2(112, -80)
 position = Vector2(-96, -16)
 
 [node name="Boxes3" parent="." instance=ExtResource("3_lnu2h")]
-position = Vector2(-64, -32)
+position = Vector2(-96, -32)
+
+[node name="ExplodeBox2" parent="." instance=ExtResource("4_p57ef")]
+position = Vector2(112, -64)
