@@ -114,9 +114,10 @@ func updateExplosionTimer(num):
 	# When reaches 0, explode. Will not replay exploding animation when undoing.
 	# When negative returns to 1 (or 0 im bad at counting), replace the exploding box.
 	var textDisplay = $Label
+	var prevCountdown = tempCountdown
 	tempCountdown += num
 	if exploded == true:
-		if tempCountdown >= 0:
+		if tempCountdown >= 1:
 			self.visible = true
 			$CollisionShape2D.disabled = false
 			exploded = false
@@ -124,7 +125,7 @@ func updateExplosionTimer(num):
 		tempCountdown = countdown
 		hasMoved = false
 	textDisplay.text = str(tempCountdown)
-	if tempCountdown == 0:
+	if prevCountdown > 0 and tempCountdown == 0:
 		explode()
 
 func initExplosionTimer():
@@ -186,15 +187,3 @@ func explode():
 	#When enemies show up many more edge cases. Player hit by enemy dies. 
 #	
 	pass
-
-
-func _on_explosion_radius_area_entered(area: Area2D):
-	print("Area entered:", area.name)
-	if area.is_in_group("ExplodingBoxArea"):
-		print("Exploding box is in area")
-	if area.is_in_group("Box"):
-		print("Box is in area")
-	if area.is_in_group("PlayerBody"):
-		print("Player is in area")
-	if area.is_in_group("ExplodingWall"):
-		print("Exploding wall is in area")

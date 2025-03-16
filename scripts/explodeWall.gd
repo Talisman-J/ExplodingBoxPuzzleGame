@@ -33,7 +33,7 @@ func _on_moveCountChange(newMoveCount):
 
 func undoExplode():
 	print("movedOn: ", movedOn, " + MOVECOUNT: ", MOVECOUNT)
-	if movedOn == MOVECOUNT:
+	if (movedOn - 1) == MOVECOUNT:
 		self.visible = true
 		exploded = false
 		$CollisionShape2D.disabled = false
