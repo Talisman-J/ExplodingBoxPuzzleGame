@@ -118,6 +118,7 @@ func updateExplosionTimer(num):
 	tempCountdown += num
 	if exploded == true:
 		if tempCountdown >= 1:
+			$Fire.visible = false
 			self.visible = true
 			$CollisionShape2D.disabled = false
 			exploded = false
@@ -143,6 +144,7 @@ func tryIncreaseMoveCount():
 func explode():
 	#Change the name of this method to something else so that exploding boxes can blow up each other. 
 	if !exploded:
+		$Fire.visible = true
 		await get_tree().create_timer(.05).timeout
 		self.visible = false
 		exploded = true
