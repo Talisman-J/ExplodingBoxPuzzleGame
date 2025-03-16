@@ -91,8 +91,6 @@ func attempt_move(direction):
 		currPos = target_pos
 		moving = true # Lock until move completes
 		didMove = true
-		
-		position = currPos
 		moves.append([position, MOVECOUNT])
 		worked = true
 		if gettingPushed == true:
@@ -100,6 +98,7 @@ func attempt_move(direction):
 			moves.pop_back()
 	else:
 		worked = false
+	position = currPos
 	moving = false 
 	
 
