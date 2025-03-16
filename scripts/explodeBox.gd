@@ -137,14 +137,12 @@ func initExplosionTimer():
 
 func explode():
 	if !exploded:
+		await get_tree().create_timer(.05).timeout
 		self.visible = false
 		exploded = true
 		$CollisionShape2D.disabled = true
-	
-	
 		var expRad = $ExplosionRadius
 		var angleDir
-		player.setMoving(true)
 		for input in inputs:
 			expRad.clear_exceptions()
 			expRad.force_raycast_update()
@@ -163,7 +161,6 @@ func explode():
 					break
 			for object in hitObjects:
 				object.explode() #Make sure this is implemented in every object. Might want to add direction param
-		player.setMoving(false)
 		
 	#Likely places to error: In the case that 2 objects are in 1 raycast
 	#Intended behaviour: Push back one first, then closest second. 

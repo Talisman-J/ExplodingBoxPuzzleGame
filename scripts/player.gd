@@ -7,9 +7,12 @@ var input_vector = Vector2.ZERO
 var moving : bool = false # To lock movement until reaching tile
 var moves: Array = [] # Holds the location of each move and which direction the player was facing at the time. 
 static var MOVECOUNT : int = 0
+var exploding = false
 
-func setMoving(value):
-	moving = value
+func setMovingTrue():
+	moving = true
+func setMovingFalse():
+	moving = false
 
 signal moveCountChange(newMoveCount)
 
@@ -19,40 +22,37 @@ signal moveCountChange(newMoveCount)
 const TILE_SIZE = 16
 
 func _unhandled_input(event):
-	if moving:
-		return # Prevent new movement until done with current one
-
-	# Only react to key presses (no continuous movement)
-	if event.is_action_pressed("ui_right"):
-		input_vector = Vector2(1, 0)
-		attempt_move("right")
-	elif event.is_action_pressed("ui_left"):
-		input_vector = Vector2(-1, 0)
-		attempt_move("left")
-	elif event.is_action_pressed("ui_up"):
-		input_vector = Vector2(0, -1)
-		attempt_move("up")
-	elif event.is_action_pressed("ui_down"):
-		input_vector = Vector2(0, 1)
-		attempt_move("down")
-	elif event.is_action_pressed("undoMove"):
-		undo()
-	update_animation_parameters()
+	if moving == false:
+		# Only react to key presses (no continuous movement)
+		if event.is_action_pressed("ui_right"):
+			input_vector = Vector2(1, 0)
+			attempt_move("right")
+		elif event.is_action_pressed("ui_left"):
+			input_vector = Vector2(-1, 0)
+			attempt_move("left")
+		elif event.is_action_pressed("ui_up"):
+			input_vector = Vector2(0, -1)
+			attempt_move("up")
+		elif event.is_action_pressed("ui_down"):
+			input_vector = Vector2(0, 1)
+			attempt_move("down")
+		elif event.is_action_pressed("undoMove"):
+			undo()
+		update_animation_parameters()
 
 func attempt_move(direction):
 	var target_pos = currPos + input_vector * TILE_SIZE
 	
 	if can_move_to(direction):
 		currPos = target_pos
-		moving = true # Lock until move completes
-		update_animation_parameters()
-	position = currPos
+		setMovingTrue() # Lock until move completes
+		position = currPos
 	moves.append([position, input_vector])
 	MOVECOUNT += 1
 	moveCountChange.emit(MOVECOUNT)
-	moving = false 
 	update_animation_parameters()
-	
+	if !exploding:
+		setMovingFalse()
 
 func update_animation_parameters():
 	# Update blend position (for direction)
@@ -117,5 +117,8 @@ func undo():
 		moveCountChange.emit(MOVECOUNT)
 		
 func explode():
+	exploding = true
 	print("Player Blew UP")
-	pass
+	setMovingTrue()
+	
+	

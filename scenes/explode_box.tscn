@@ -46,14 +46,18 @@ text_overrun_behavior = 1
 target_position = Vector2(0, -16)
 collision_mask = 15
 
-[node name="ExplosionRadius" type="Area2D" parent="explodingBox" groups=["ExplodingBoxArea"]]
+[node name="unused" type="Area2D" parent="explodingBox" groups=["ExplodingBoxArea"]]
 
-[node name="explodeRow" type="CollisionShape2D" parent="explodingBox/ExplosionRadius"]
+[node name="explodeRow" type="CollisionShape2D" parent="explodingBox/unused"]
 scale = Vector2(5, 1)
 shape = SubResource("RectangleShape2D_p57ef")
 
-[node name="explodeCol" type="CollisionShape2D" parent="explodingBox/ExplosionRadius"]
+[node name="explodeCol" type="CollisionShape2D" parent="explodingBox/unused"]
 scale = Vector2(1, 5)
 shape = SubResource("RectangleShape2D_p57ef")
 
-[connection signal="area_entered" from="explodingBox/ExplosionRadius" to="explodingBox" method="_on_explosion_radius_area_entered"]
+[node name="ExplosionRadius" type="RayCast2D" parent="explodingBox"]
+target_position = Vector2(0, -32)
+collision_mask = 14
+
+[connection signal="area_entered" from="explodingBox/unused" to="explodingBox" method="_on_explosion_radius_area_entered"]
