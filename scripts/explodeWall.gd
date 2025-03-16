@@ -32,7 +32,7 @@ func _on_moveCountChange(newMoveCount):
 		
 
 func undoExplode():
-	print("movedOn: ", movedOn, " + MOVECOUNT: ", MOVECOUNT)
+	print("explodedOn: ", movedOn, " + MOVECOUNT: ", MOVECOUNT)
 	if (movedOn - 1) == MOVECOUNT:
 		self.visible = true
 		exploded = false
@@ -40,7 +40,7 @@ func undoExplode():
 		movedOn = -1
 	
 
-func explode():
+func explode(_dir):
 	if !exploded:
 		self.visible = false
 		exploded = true

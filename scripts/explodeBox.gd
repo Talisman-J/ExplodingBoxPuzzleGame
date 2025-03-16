@@ -108,11 +108,11 @@ func check_undo():
 		self.position = initPos
 	
 @export var countdown : int = 5
-var tempCountdown = countdown
+@onready var tempCountdown = countdown
 func updateExplosionTimer(num):
 	# Timer variable decrements for each increment in MOVECOUNT. Increments for each decrement in MOVECOUNT. 
 	# When reaches 0, explode. Will not replay exploding animation when undoing.
-	# When negative returns to 1 (or 0 im bad at counting), replace the exploding box.
+	# When negative returns to 1, replace the exploding box.
 	var textDisplay = $Label
 	var prevCountdown = tempCountdown
 	tempCountdown += num
@@ -134,9 +134,14 @@ func initExplosionTimer():
 	textDisplay.text = str(countdown)
 
 
-
+var alreadyDidInc = false
+func tryIncreaseMoveCount():
+	if alreadyDidInc == false:
+		player.incrementMoveCount()
+		alreadyDidInc = true
 
 func explode():
+	#Change the name of this method to something else so that exploding boxes can blow up each other. 
 	if !exploded:
 		await get_tree().create_timer(.05).timeout
 		self.visible = false
@@ -152,16 +157,19 @@ func explode():
 			expRad.force_raycast_update()
 			
 			var hitObjects = []
+			var directions = []
 			for i in range(2): # limit attempts to prevent infinite loop
 				expRad.force_raycast_update()
 				if expRad.is_colliding():
 					var obj = expRad.get_collider()
 					hitObjects.append(obj)
+					
 					expRad.add_exception(obj) # avoid hitting it again
 				else:
 					break
 			for object in hitObjects:
-				object.explode() #Make sure this is implemented in every object. Might want to add direction param
+				object.explode(input) #Make sure this is implemented in every object. Might want to add direction param
+		#tryIncreaseMoveCount()
 		
 	#Likely places to error: In the case that 2 objects are in 1 raycast
 	#Intended behaviour: Push back one first, then closest second. 

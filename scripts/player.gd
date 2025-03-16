@@ -16,6 +16,11 @@ func setMovingFalse():
 
 signal moveCountChange(newMoveCount)
 
+func incrementMoveCount():
+	MOVECOUNT += 1
+	moveCountChange.emit(MOVECOUNT)
+	print("New Movecount is: ", MOVECOUNT)
+
 @onready var ray = $RayCast2D
 
 # Size of tile (adjust as needed)
@@ -116,7 +121,7 @@ func undo():
 		MOVECOUNT -= 1
 		moveCountChange.emit(MOVECOUNT)
 		
-func explode():
+func explode(dir):
 	exploding = true
 	print("Player Blew UP")
 	setMovingTrue()

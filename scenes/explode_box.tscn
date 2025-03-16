@@ -1,12 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://2qbsfxti0leb"]
+[gd_scene load_steps=4 format=3 uid="uid://2qbsfxti0leb"]
 
 [ext_resource type="Script" uid="uid://b0kel6566h4ks" path="res://scripts/explodeBox.gd" id="1_d5wfv"]
 [ext_resource type="Texture2D" uid="uid://cxn0k05mgd62y" path="res://assets/SciAssets/SciSpriteSheet.png" id="2_h6g1i"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lnu2h"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_p57ef"]
-size = Vector2(16, 16)
 
 [node name="ExplodeBox" type="Node2D"]
 
@@ -14,6 +11,7 @@ size = Vector2(16, 16)
 collision_layer = 6
 collision_mask = 6
 script = ExtResource("1_d5wfv")
+countdown = 9
 metadata/exploded = false
 
 [node name="Sprite2D" type="Sprite2D" parent="explodingBox"]
@@ -46,18 +44,6 @@ text_overrun_behavior = 1
 target_position = Vector2(0, -16)
 collision_mask = 15
 
-[node name="unused" type="Area2D" parent="explodingBox" groups=["ExplodingBoxArea"]]
-
-[node name="explodeRow" type="CollisionShape2D" parent="explodingBox/unused"]
-scale = Vector2(5, 1)
-shape = SubResource("RectangleShape2D_p57ef")
-
-[node name="explodeCol" type="CollisionShape2D" parent="explodingBox/unused"]
-scale = Vector2(1, 5)
-shape = SubResource("RectangleShape2D_p57ef")
-
 [node name="ExplosionRadius" type="RayCast2D" parent="explodingBox"]
 target_position = Vector2(0, -32)
 collision_mask = 14
-
-[connection signal="area_entered" from="explodingBox/unused" to="explodingBox" method="_on_explosion_radius_area_entered"]

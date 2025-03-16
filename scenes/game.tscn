@@ -64,10 +64,10 @@ zoom = Vector2(3, 3.4)
 position = Vector2(0, -1)
 
 [node name="Boxes" parent="." instance=ExtResource("3_lnu2h")]
-position = Vector2(16, 0)
+position = Vector2(-128, -48)
 
 [node name="ExplodeBox" parent="." instance=ExtResource("4_p57ef")]
-position = Vector2(128, -48)
+position = Vector2(-80, -48)
 
 [node name="TileMapLayerWalls" type="TileMapLayer" parent="."]
 show_behind_parent = true
@@ -88,7 +88,7 @@ tile_set = SubResource("TileSet_p57ef")
 position = Vector2(112, -80)
 
 [node name="Boxes2" parent="." instance=ExtResource("3_lnu2h")]
-position = Vector2(48, -48)
+position = Vector2(-96, -16)
 
 [node name="Boxes3" parent="." instance=ExtResource("3_lnu2h")]
-position = Vector2(112, -16)
+position = Vector2(-64, -32)
