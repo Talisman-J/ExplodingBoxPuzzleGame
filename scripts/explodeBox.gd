@@ -145,6 +145,7 @@ func explode():
 	#Change the name of this method to something else so that exploding boxes can blow up each other. 
 	if !exploded:
 		$Fire.visible = true
+		#TODO: In the future for visual effect, hold this fire and an exploding barrel for a frame until player advances next turn for visual pleasantness.
 		await get_tree().create_timer(.05).timeout
 		self.visible = false
 		exploded = true
