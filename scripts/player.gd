@@ -9,8 +9,16 @@ var moves: Array = [] # Holds the location of each move and which direction the 
 static var MOVECOUNT : int = 0
 var exploding = false
 var gettingPushed = false
-
+var dead : bool = false
 var didMove = false
+var turnsSinceDeath = null
+
+
+
+#TODO: Make explosions that go off at the same time all affect the player/boxes.
+#TODO: Make it so that the player can still press movement keys to advance turns but just can't move. 
+
+
 
 func setMovingTrue():
 	moving = true
@@ -30,6 +38,20 @@ func incrementMoveCount():
 const TILE_SIZE = 16
 
 func _unhandled_input(event):
+	if dead:
+		print("DEAD")
+		if event.is_action_pressed("ui_right") or event.is_action_pressed("ui_left") or event.is_action_pressed("ui_up") or event.is_action_pressed("ui_down"):
+			MOVECOUNT += 1
+			moveCountChange.emit(MOVECOUNT)
+			turnsSinceDeath += 1
+			moves.append([position, input_vector])
+		if event.is_action_pressed("undoMove"):
+			undo()
+			turnsSinceDeath -= 1
+			if turnsSinceDeath == 0:
+				dead = false
+				turnsSinceDeath = null
+		return
 	if moving == false:
 		# Only react to key presses (no continuous movement)
 		if event.is_action_pressed("ui_right"):
@@ -71,21 +93,31 @@ func push_other(direction) -> bool:
 	moves.append([position, input_vector])
 	return didMove
 
+var inputs = {
+	"right": Vector2.RIGHT,
+	"left": Vector2.LEFT,
+	"up": Vector2.UP,
+	"down": Vector2.DOWN}
+
 
 func attempt_move(direction):
+	if exploding:
+		input_vector = inputs[direction]
 	var target_pos = currPos + input_vector * TILE_SIZE
 	
 	if can_move_to(direction):
 		currPos = target_pos
-		setMovingTrue() # Lock until move completes
+		#setMovingTrue() 
 		position = currPos
-	if gettingPushed == false:
+	if gettingPushed == false and exploding == false:
 		moves.append([position, input_vector])
 		MOVECOUNT += 1
 		moveCountChange.emit(MOVECOUNT)
+		if dead == true:
+			turnsSinceDeath += 1
 	update_animation_parameters()
-	if !exploding:
-		setMovingFalse()
+	#if !exploding:
+		#setMovingFalse()
 
 func update_animation_parameters():
 	# Update blend position (for direction)
@@ -97,12 +129,6 @@ func update_animation_parameters():
 	animation_tree["parameters/playback"].travel("Idle")
 	#else:
 		#animation_tree["parameters/playback"].travel("Walk")
-
-var inputs = {
-	"right": Vector2.RIGHT,
-	"left": Vector2.LEFT,
-	"up": Vector2.UP,
-	"down": Vector2.DOWN}
 	
 func can_move_to(checkPos) -> bool:
 	var angleDir = inputs[checkPos].angle()
@@ -120,16 +146,6 @@ func can_move_to(checkPos) -> bool:
 		
 		
 func undo():
-	#TODO: Undo should reset each time a new room is entered so as not to build up way too much data. Set return point to where new room is entered
-	
-	#TODO: In order to handle wall breaks, create a new object where broken wall is that increments for each move. Decrements for each undo. When reaches 0, replace wall. 
-	#Same can be done for exploding blocks and any other blocks that get removed. Corpses will be similar to boxes. 
-	
-	#TODO: Make other objects undo also. 
-	# -Maybe just give each object a position array. Seems like it would get laggy quick though. 
-	# -Different solution have marker points that do diff things so basically only has to know when and what happened but not where. 
-	# Would get out of hand with how many things can happen though especially in all 4 direcions... 
-	
 	if moves.size() > 1:
 		#Pop the back and set player position to the new back. 
 		moves.pop_back()
@@ -151,7 +167,21 @@ func undo():
 		
 func explode(dir):
 	exploding = true
-	print("Player Blew UP")
-	setMovingTrue()
+	dead = true
+	print("EXPLODING PLAYER IN DIRECTION:", dir)
+	
+	#This might error or might not be necessary
+	moves.pop_back()
+	
+	attempt_move(dir)
+	attempt_move(dir)
+	
+	moves.append([position, input_vector])
+	
+	if turnsSinceDeath != null:
+		turnsSinceDeath = 0
+	
+	
+	exploding = false
 	
 	
