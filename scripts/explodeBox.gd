@@ -147,8 +147,10 @@ func explode():
 	if !exploded:
 		$Fire.visible = true
 		#TODO: In the future for visual effect, hold this fire and an exploding barrel for a frame until player advances next turn for visual pleasantness.
+		var temporaryMoveCount = MOVECOUNT
+		#await player.moveCountChange
 		await get_tree().create_timer(.05).timeout
-		self.visible = false
+		#self.visible = false
 		exploded = true
 		$CollisionShape2D.disabled = true
 		var expRad = $ExplosionRadius
@@ -173,6 +175,9 @@ func explode():
 					break
 			for object in hitObjects:
 				object.explode(input) #Make sure this is implemented in every object. Might want to add direction param
+		await player.moveCountChange
+		self.visible = false
+		#self.visible = false
 		#tryIncreaseMoveCount()
 		
 	#Likely places to error: In the case that 2 objects are in 1 raycast

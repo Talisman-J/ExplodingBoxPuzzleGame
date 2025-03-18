@@ -11,13 +11,14 @@ var exploding = false
 var gettingPushed = false
 var dead : bool = false
 var didMove = false
-var turnsSinceDeath = null
+var turnsSinceDeath
 
 
 
 #TODO: Make explosions that go off at the same time all affect the player/boxes.
 #TODO: Make it so that the player can still press movement keys to advance turns but just can't move. 
 
+#TODO: If two enemies or an enemy and player run into box at same time, explode it. Have a little message that says "Turns out these boxes have gunpowder in them too." 
 
 
 func setMovingTrue():
@@ -48,9 +49,8 @@ func _unhandled_input(event):
 		if event.is_action_pressed("undoMove"):
 			undo()
 			turnsSinceDeath -= 1
-			if turnsSinceDeath == 0:
+			if turnsSinceDeath == -1:
 				dead = false
-				turnsSinceDeath = null
 		return
 	if moving == false:
 		# Only react to key presses (no continuous movement)
@@ -178,8 +178,8 @@ func explode(dir):
 	
 	moves.append([position, input_vector])
 	
-	if turnsSinceDeath != null:
-		turnsSinceDeath = 0
+	#IF TWO BOXES EXPLODES THIS OVERRIDES THE VALUE OF DEATH AND SO PLAYER GETS REVIVED AT SECOND BOX.
+	turnsSinceDeath = 0
 	
 	
 	exploding = false

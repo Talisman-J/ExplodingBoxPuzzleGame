@@ -10,15 +10,15 @@
 
 2. Make exploding boxes 
 
-   1. Kill Player when in radius []
+   1. Kill Player when in radius [~]
 
-   2. Explode after a certain amount of tiles are moved by the player. Number is on box, counts down each turn passed by player.  []
+   2. Explode after a certain amount of tiles are moved by the player. Number is on box, counts down each turn passed by player.  [X]
 
-   3. Push player corpse/enemy corpse/boxes back 2 tiles []
+   3. Push player corpse/enemy corpse/boxes back 2 tiles [~]
 
-   4. Boxes push player when exploded. Stop when hit wall. If Push player into wall, break wall, kill player.  []
+   4. Boxes push player when exploded. Stop when hit wall. If Push player into wall, break wall, kill player.  [~]
 
-   5. Break open certain walls when exploded in their radius. []
+   5. Break open certain walls when exploded in their radius. [X]
 
    6. Enemy when diving away from explosion can break walls. Dies. []
 
