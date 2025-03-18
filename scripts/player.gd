@@ -171,7 +171,8 @@ func explode(dir):
 	print("EXPLODING PLAYER IN DIRECTION:", dir)
 	
 	#This might error or might not be necessary
-	moves.pop_back()
+	
+	moves.append([position, input_vector])
 	
 	attempt_move(dir)
 	attempt_move(dir)

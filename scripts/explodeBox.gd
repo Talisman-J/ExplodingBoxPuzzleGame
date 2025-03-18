@@ -110,19 +110,32 @@ func check_undo():
 #HOW TO CHANGE THIS: Right click on the exploding box scene, turn on editable-children. 
 @export var countdown : int = 5
 @onready var tempCountdown = countdown
+var firstMove = true
 func updateExplosionTimer(num):
 	# Timer variable decrements for each increment in MOVECOUNT. Increments for each decrement in MOVECOUNT. 
-	# When reaches 0, explode. Will not replay exploding animation when undoing.
+	# When reaches 0, explode. Will replay exploding animation when undoing.
 	# When negative returns to 1, replace the exploding box.
 	var textDisplay = $Label
 	var prevCountdown = tempCountdown
 	tempCountdown += num
 	if exploded == true:
-		if tempCountdown >= 1:
-			$Fire.visible = false
+		if tempCountdown >= 0:
+			#TODO: There's something wrong with my undo in here and I can't figure out what it is.
+			# To replicate, get exploded. undo. get exploded again. Undo doesn't work. 
+			print("TEMP COUNTDOWN IS:", tempCountdown)
+			if tempCountdown == 1 and firstMove == true:
+				print("THIS IS TRUE ACTUALLY")
+				await self.finishedVisualExplosion
 			self.visible = true
-			$CollisionShape2D.disabled = false
-			exploded = false
+			print("VISIBLE IS TRUEEEEEEEEEEEEE")
+			if tempCountdown >= 1:
+				#self.visible = true
+				print("DOES THIS EVER RUNNNNNNNNN??????")
+				$CollisionShape2D.disabled = false
+				exploded = false
+				$Fire.visible = false
+				firstMove = true
+		firstMove = false
 	elif tempCountdown >= countdown:
 		tempCountdown = countdown
 		hasMoved = false
@@ -136,12 +149,12 @@ func initExplosionTimer():
 	textDisplay.text = str(countdown)
 
 
-var alreadyDidInc = false
-func tryIncreaseMoveCount():
-	if alreadyDidInc == false:
-		player.incrementMoveCount()
-		alreadyDidInc = true
-
+#var alreadyDidInc = false    #UNUSED!!!!
+#func tryIncreaseMoveCount():
+	#if alreadyDidInc == false:
+		#player.incrementMoveCount()
+		#alreadyDidInc = true
+signal finishedVisualExplosion() #finishedVis
 func explode():
 	#Change the name of this method to something else so that exploding boxes can blow up each other. 
 	if !exploded:
@@ -149,7 +162,7 @@ func explode():
 		#TODO: In the future for visual effect, hold this fire and an exploding barrel for a frame until player advances next turn for visual pleasantness.
 		var temporaryMoveCount = MOVECOUNT
 		#await player.moveCountChange
-		await get_tree().create_timer(.05).timeout
+		#await get_tree().create_timer(.05).timeout
 		#self.visible = false
 		exploded = true
 		$CollisionShape2D.disabled = true
@@ -177,8 +190,17 @@ func explode():
 				object.explode(input) #Make sure this is implemented in every object. Might want to add direction param
 		await player.moveCountChange
 		self.visible = false
-		#self.visible = false
-		#tryIncreaseMoveCount()
+		print("VISIBLE IS FALSEEEEEEEEEEE")
+		finishedVisualExplosion.emit()
+		
+		#Explode when undone while still visible makes the box invisible. 
+		
+		#Explosion is not visible when undoing. 
+		
+		
+		
+		
+		
 		
 	#Likely places to error: In the case that 2 objects are in 1 raycast
 	#Intended behaviour: Push back one first, then closest second. 
@@ -203,4 +225,4 @@ func explode():
 	#Have edge case for box hitting player into wall breaking wall killing player. Doesn't kill normally, just pushes. 
 	#When enemies show up many more edge cases. Player hit by enemy dies. 
 #	
-	pass
+	
