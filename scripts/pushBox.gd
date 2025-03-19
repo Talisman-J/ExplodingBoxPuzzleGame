@@ -31,11 +31,11 @@ func _on_moveCountChange(newMoveCount):
 		# Check undo for if position is there.
 		check_undo()
 		MOVECOUNT = newMoveCount
-		print("Current Movecount is: ", MOVECOUNT)
+		#print("Current Movecount is: ", MOVECOUNT)
 	else:
 		# Update for undo to be able to keep track of which move box was moved on. 
 		MOVECOUNT = newMoveCount
-		print("Current Movecount is: ", MOVECOUNT)
+		#print("Current Movecount is: ", MOVECOUNT)
 	
 func push_box(direction) -> bool:
 	if moving:
@@ -138,12 +138,12 @@ func can_move_to(checkPos) -> bool:
 #This way it stores only the necessary stuff and only calls it when necessary to hopefully be at least somewhat efficient. 
 
 func check_undo():
-	print("Size of moves is: ", moves.size())
+	#print("Size of moves is: ", moves.size())
 	if moves.size() > 0:
 		var currListItem = moves.get(moves.size() - 1)
-		print("OUTSIDE the if statement: ",currListItem.get(1))
+		#print("OUTSIDE the if statement: ",currListItem.get(1))
 		if (MOVECOUNT - 1) == currListItem.get(1):
-			print("Inside the if statement: ",currListItem.get(1))
+			#print("Inside the if statement: ",currListItem.get(1))
 			moves.pop_back()
 			currPos = currListItem.get(0)
 			self.position += (currPos - position)
@@ -162,14 +162,14 @@ func explode(dir):
 		if lastElement.get(1) != MOVECOUNT - 1:
 			moves.append([position, MOVECOUNT - 1])
 	
-	print("Before explosion: ", MOVECOUNT - 1, " Movecount and ", position, " Position" )
+	#print("Before explosion: ", MOVECOUNT - 1, " Movecount and ", position, " Position" )
 	push_box(dir)
 	if worked == true:
 		moves.pop_back()
 	push_box(dir)
 	if worked == true:
 		moves.pop_back()
-	print(MOVECOUNT, " Movecount and ", position, " Position" )
+	#print(MOVECOUNT, " Movecount and ", position, " Position" )
 	print("Box Blew UP")
 	
 	exploding = false

@@ -122,7 +122,7 @@ func updateExplosionTimer(num):
 		if tempCountdown >= 0:
 			#TODO: There's something wrong with my undo in here and I can't figure out what it is.
 			# To replicate, get exploded. undo. get exploded again. Undo doesn't work. 
-			print("TEMP COUNTDOWN IS:", tempCountdown)
+			#print("TEMP COUNTDOWN IS:", tempCountdown)
 			if tempCountdown == 1 and firstMove == true:
 				print("THIS IS TRUE ACTUALLY")
 				await self.finishedVisualExplosion

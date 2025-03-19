@@ -129,7 +129,7 @@ position = Vector2(112, -64)
 position = Vector2(64, -80)
 
 [node name="ExplodeWall3" parent="." instance=ExtResource("6_u5sy4")]
-position = Vector2(-48, -32)
+position = Vector2(-48, -96)
 
 [node name="ExplodeBox3" parent="." instance=ExtResource("4_p57ef")]
 position = Vector2(-64, -32)
@@ -147,13 +147,16 @@ countdown = 5
 position = Vector2(112, 48)
 
 [node name="explodingBox" parent="ExplodeBox5" index="0"]
-countdown = 5
+countdown = 20
 
 [node name="ExplodeBox6" parent="." instance=ExtResource("4_p57ef")]
 position = Vector2(64, 64)
 
 [node name="explodingBox" parent="ExplodeBox6" index="0"]
 countdown = 9
+
+[node name="Boxes5" parent="." instance=ExtResource("3_lnu2h")]
+position = Vector2(-112, -32)
 
 [editable path="ExplodeBox4"]
 [editable path="ExplodeBox5"]
