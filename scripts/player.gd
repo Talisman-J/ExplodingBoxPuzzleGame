@@ -110,20 +110,27 @@ var inputs = {
 func moveUp():
 	var targPos = currPos + inputs["up"] * TILE_SIZE
 	if can_move_to("up"):
-		currPos = targPos
-		position = currPos
-		if !undoing and !gettingPushed and !exploding:
-			MOVECOUNT += 1
-			moveCountChange.emit(MOVECOUNT)
-			moves.append(["MoveUp", MOVECOUNT])
-		if undoing and !exploded:
-			MOVECOUNT -= 1
-			moveCountChange.emit(MOVECOUNT)
-		if gettingPushed:
-			moves.pop_back()
-			moves.append(["PushUp", MOVECOUNT])
-		if undoing and exploded:
-			exploded = false
+		if exploded:
+			currPos = targPos
+			position = currPos
+			if undoing:
+				MOVECOUNT -= 1
+				moveCountChange.emit(MOVECOUNT)
+				#HANDLE THE LOGIC WHEN IT REACHES PROPER MOVECOUNT IN UNDO OR EXPLODE()
+		else:
+			currPos = targPos
+			position = currPos
+			if !undoing and !gettingPushed:
+				MOVECOUNT += 1
+				moveCountChange.emit(MOVECOUNT)
+				moves.append(["MoveUp", MOVECOUNT])
+			if undoing:
+				MOVECOUNT -= 1
+				moveCountChange.emit(MOVECOUNT)
+			if gettingPushed:
+				moves.pop_back()
+				moves.append(["PushUp", MOVECOUNT])
+		
 			
 	else:
 		MOVECOUNT += 1
@@ -134,18 +141,27 @@ func moveUp():
 func moveDown():
 	var targPos = currPos + inputs["down"] * TILE_SIZE
 	if can_move_to("down"):
-		currPos = targPos
-		position = currPos
-		if !undoing and !gettingPushed and !exploding:
-			MOVECOUNT += 1
-			moveCountChange.emit(MOVECOUNT)
-			moves.append(["MoveDown", MOVECOUNT])
-		if undoing and !exploded:
-			MOVECOUNT -= 1
-			moveCountChange.emit(MOVECOUNT)
-		if gettingPushed:
-			moves.pop_back()
-			moves.append(["PushDown", MOVECOUNT])
+		if exploded:
+			currPos = targPos
+			position = currPos
+			if undoing:
+				MOVECOUNT -= 1
+				moveCountChange.emit(MOVECOUNT)
+				#HANDLE THE LOGIC WHEN IT REACHES PROPER MOVECOUNT IN UNDO OR EXPLODE()
+		else:
+			currPos = targPos
+			position = currPos
+			if !undoing and !gettingPushed and !exploded:
+				MOVECOUNT += 1
+				moveCountChange.emit(MOVECOUNT)
+				moves.append(["MoveDown", MOVECOUNT])
+			if undoing:
+				MOVECOUNT -= 1
+				moveCountChange.emit(MOVECOUNT)
+			if gettingPushed:
+				moves.pop_back()
+				moves.append(["PushDown", MOVECOUNT])
+		
 	else:
 		MOVECOUNT += 1
 		moveCountChange.emit(MOVECOUNT)
@@ -155,18 +171,27 @@ func moveDown():
 func moveLeft():
 	var targPos = currPos + inputs["left"] * TILE_SIZE
 	if can_move_to("left"):
-		currPos = targPos
-		position = currPos
-		if !undoing and !gettingPushed and !exploding:
-			MOVECOUNT += 1
-			moveCountChange.emit(MOVECOUNT)
-			moves.append(["MoveLeft", MOVECOUNT])
-		if undoing and !exploded:
-			MOVECOUNT -= 1
-			moveCountChange.emit(MOVECOUNT)
-		if gettingPushed:
-			moves.pop_back()
-			moves.append(["PushLeft", MOVECOUNT])
+		if exploded:
+			currPos = targPos
+			position = currPos
+			if undoing:
+				MOVECOUNT -= 1
+				moveCountChange.emit(MOVECOUNT)
+				#HANDLE THE LOGIC WHEN IT REACHES PROPER MOVECOUNT IN UNDO OR EXPLODE()
+		else:
+			currPos = targPos
+			position = currPos
+			if !undoing and !gettingPushed and !exploded:
+				MOVECOUNT += 1
+				moveCountChange.emit(MOVECOUNT)
+				moves.append(["MoveLeft", MOVECOUNT])
+			if undoing:
+				MOVECOUNT -= 1
+				moveCountChange.emit(MOVECOUNT)
+			if gettingPushed:
+				moves.pop_back()
+				moves.append(["PushLeft", MOVECOUNT])
+		
 	else:
 		MOVECOUNT += 1
 		moveCountChange.emit(MOVECOUNT)
@@ -176,25 +201,34 @@ func moveLeft():
 func moveRight():
 	var targPos = currPos + inputs["right"] * TILE_SIZE
 	if can_move_to("right"):
-		currPos = targPos
-		position = currPos
-		if !undoing and !gettingPushed and !exploding:
-			MOVECOUNT += 1
-			moveCountChange.emit(MOVECOUNT)
-			moves.append(["MoveRight", MOVECOUNT])
-		if undoing and !exploding:
-			MOVECOUNT -= 1
-			moveCountChange.emit(MOVECOUNT)
-		if gettingPushed:
-			moves.pop_back()
-			moves.append(["PushRight", MOVECOUNT])
-		#if undoing and exploding:
-			
+		if exploded:
+			currPos = targPos
+			position = currPos
+			if undoing:
+				MOVECOUNT -= 1
+				moveCountChange.emit(MOVECOUNT)
+				#HANDLE THE LOGIC WHEN IT REACHES PROPER MOVECOUNT IN UNDO OR EXPLODE()
+		else:
+			currPos = targPos
+			position = currPos
+			if !undoing and !gettingPushed and !exploded:
+				MOVECOUNT += 1
+				moveCountChange.emit(MOVECOUNT)
+				moves.append(["MoveRight", MOVECOUNT])
+			if undoing:
+				MOVECOUNT -= 1
+				moveCountChange.emit(MOVECOUNT)
+			if gettingPushed:
+				moves.pop_back()
+				moves.append(["PushRight", MOVECOUNT])
 	else:
 		MOVECOUNT += 1
 		moveCountChange.emit(MOVECOUNT)
 		moves.append(["Inaction", MOVECOUNT])
 	update_animation_parameters()
+
+
+
 
 func moveAuto(dir):
 	if(dir == "up"):
@@ -277,91 +311,94 @@ func can_move_to(checkPos) -> bool:
 		#MOVECOUNT -= 1
 		#moveCountChange.emit(MOVECOUNT)
 		
-		
+func getListActions(num):
+	var actions = []
+	for move in moves:
+		if move.get(1) == num:
+			actions.append(move)
+	return actions
+	
 func undo():
-	undoing = true
-	if moves.size() > 0:
-		#Get each action for current MOVECOUNT. Loop through them. Will avoid the weird jank especially when not having an "Inactive" signal. Also means multiple events can happen at once.
-		
-		var action = moves.get(moves.size() - 1).get(0)
-		#MOVEMENT UNDO
-		if action == "MoveUp":
-			input_vector = Vector2(0, -1)
-			moveDown()
-		if action == "MoveDown":
-			input_vector = Vector2(0, 1)
-			moveUp()
-		if action == "MoveRight":
-			input_vector = Vector2(1, 0)
-			moveLeft()
-		if action == "MoveLeft":
-			input_vector = Vector2(-1, 0)
-			moveRight()
-			
-		#PUSHED UNDO -figured I would keep it seperate in case I want special behaviour. 
-		if action == "PushUp":
-			input_vector = Vector2(0, -1)
-			moveDown()
-		if action == "PushDown":
-			input_vector = Vector2(0, 1)
-			moveUp()
-		if action == "PushRight":
-			input_vector = Vector2(1, 0)
-			moveLeft()
-		if action == "PushLeft":
-			input_vector = Vector2(-1, 0)
-			moveRight()
-		
-		#EXPLODED UNDO
-		if action == "Explode":
-			if moves.get(moves.size() - 1).get(3) == "up":
+	var actions = getListActions(MOVECOUNT)
+	for event in actions:
+		undoing = true
+		if moves.size() > 0:
+			#Get each action for current MOVECOUNT. Loop through them. Will avoid the weird jank especially when not having an "Inactive" signal. Also means multiple events can happen at once.
+			var action = moves.get(moves.size() - 1).get(0)
+			#Undo Explosion
+			if action == "Explode":
+				if moves.get(moves.size() - 1).get(3) == "up":
+					input_vector = Vector2(0, -1)
+					print(moves.get(moves.size() - 1).get(2))
+					for i in range(moves.get(moves.size() - 1).get(2)): #Gets the distance player travelled while exploding. 
+						moveDown()
+				if moves.get(moves.size() - 1).get(3) == "down":
+					input_vector = Vector2(0, 1)
+					print(moves.get(moves.size() - 1).get(2))
+					for i in range(moves.get(moves.size() - 1).get(2)): #Gets the distance player travelled while exploding. 
+						moveUp()
+				if moves.get(moves.size() - 1).get(3) == "right":
+					input_vector = Vector2(1, 0)
+					print(moves.get(moves.size() - 1).get(2))
+					for i in range(moves.get(moves.size() - 1).get(2)): #Gets the distance player travelled while exploding. 
+						moveLeft()
+				if moves.get(moves.size() - 1).get(3) == "left":
+					input_vector = Vector2(-1, 0)
+					print(moves.get(moves.size() - 1).get(2))
+					for i in range(moves.get(moves.size() - 1).get(2)): #Gets the distance player travelled while exploding. 
+						moveRight()
+			#MOVEMENT UNDO
+			if action == "MoveUp":
 				input_vector = Vector2(0, -1)
-				print(moves.get(moves.size() - 1).get(2))
-				for i in range(moves.get(moves.size() - 1).get(2)): #Gets the distance player travelled while exploding. 
-					moveDown()
-			if moves.get(moves.size() - 1).get(3) == "down":
+				moveDown()
+			if action == "MoveDown":
 				input_vector = Vector2(0, 1)
-				print(moves.get(moves.size() - 1).get(2))
-				for i in range(moves.get(moves.size() - 1).get(2)): #Gets the distance player travelled while exploding. 
-					moveUp()
-			if moves.get(moves.size() - 1).get(3) == "right":
+				moveUp()
+			if action == "MoveRight":
 				input_vector = Vector2(1, 0)
-				print(moves.get(moves.size() - 1).get(2))
-				for i in range(moves.get(moves.size() - 1).get(2)): #Gets the distance player travelled while exploding. 
-					moveLeft()
-			if moves.get(moves.size() - 1).get(3) == "left":
+				moveLeft()
+			if action == "MoveLeft":
 				input_vector = Vector2(-1, 0)
-				print(moves.get(moves.size() - 1).get(2))
-				for i in range(moves.get(moves.size() - 1).get(2)): #Gets the distance player travelled while exploding. 
-					moveRight()
-		#if action == "Explodedown":
-			#input_vector = Vector2(0, 1)
-			#print(moves.get(moves.size() - 1).get(2))
-			#for i in range(moves.get(moves.size() - 1).get(2)): #Gets the distance player travelled while exploding. 
-				#moveUp()
-		#if action == "Exploderight":
-			#input_vector = Vector2(1, 0)
-			#print(moves.get(moves.size() - 1).get(2))
-			#for i in range(moves.get(moves.size() - 1).get(2)): #Gets the distance player travelled while exploding. 
-				#moveLeft()
-		#if action == "Explodeleft":
-			#input_vector = Vector2(-1, 0)
-			#print(moves.get(moves.size() - 1).get(2))
-			#for i in range(moves.get(moves.size() - 1).get(2)): #Gets the distance player travelled while exploding. 
-				#moveRight()
-			
-		#NO ACTION
-		if action == "Inaction":
-			#Only decrements the MOVECOUNT
-			MOVECOUNT -= 1
-			moveCountChange.emit(MOVECOUNT)
-		moves.pop_back()
+				moveRight()
+				
+			#PUSHED UNDO -figured I would keep it seperate in case I want special behaviour. 
+			if action == "PushUp":
+				input_vector = Vector2(0, -1)
+				moveDown()
+			if action == "PushDown":
+				input_vector = Vector2(0, 1)
+				moveUp()
+			if action == "PushRight":
+				input_vector = Vector2(1, 0)
+				moveLeft()
+			if action == "PushLeft":
+				input_vector = Vector2(-1, 0)
+				moveRight()
+				
+			#NO ACTION
+			if action == "Inaction":
+				#Only decrements the MOVECOUNT
+				MOVECOUNT -= 1
+				moveCountChange.emit(MOVECOUNT)
+			moves.pop_back()
 		
 	undoing = false
 func explode(dir):
 	exploding = true
 	dead = true
 	exploded = true
+	
+	
+	#add location at point just before the explosion. For each at movecount, move back to location and then if there is a movement at the same 
+	#movecount (i.e. a person moved into the explosion radius.) run the undo on that. 
+#
+	#re order the if statements to have the if of movement below explosion/push logic.
+#
+	#Add a return to each statement so that only one can run. 
+
+
+
+
 	#print("EXPLODING PLAYER IN DIRECTION:", dir)
 	#
 	##This might error or might not be necessary
