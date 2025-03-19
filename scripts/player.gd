@@ -13,7 +13,7 @@ var dead : bool = false
 var didMove = false
 var turnsSinceDeath
 
-
+var exploded = false
 var undoing = false
 
 
@@ -116,13 +116,14 @@ func moveUp():
 			MOVECOUNT += 1
 			moveCountChange.emit(MOVECOUNT)
 			moves.append(["MoveUp", MOVECOUNT])
-		if undoing:
+		if undoing and !exploded:
 			MOVECOUNT -= 1
 			moveCountChange.emit(MOVECOUNT)
 		if gettingPushed:
 			moves.pop_back()
 			moves.append(["PushUp", MOVECOUNT])
-			
+		if undoing and exploded:
+			exploded = false
 			
 	else:
 		MOVECOUNT += 1
@@ -139,7 +140,7 @@ func moveDown():
 			MOVECOUNT += 1
 			moveCountChange.emit(MOVECOUNT)
 			moves.append(["MoveDown", MOVECOUNT])
-		if undoing:
+		if undoing and !exploded:
 			MOVECOUNT -= 1
 			moveCountChange.emit(MOVECOUNT)
 		if gettingPushed:
@@ -160,7 +161,7 @@ func moveLeft():
 			MOVECOUNT += 1
 			moveCountChange.emit(MOVECOUNT)
 			moves.append(["MoveLeft", MOVECOUNT])
-		if undoing:
+		if undoing and !exploded:
 			MOVECOUNT -= 1
 			moveCountChange.emit(MOVECOUNT)
 		if gettingPushed:
@@ -181,12 +182,14 @@ func moveRight():
 			MOVECOUNT += 1
 			moveCountChange.emit(MOVECOUNT)
 			moves.append(["MoveRight", MOVECOUNT])
-		if undoing:
+		if undoing and !exploding:
 			MOVECOUNT -= 1
 			moveCountChange.emit(MOVECOUNT)
 		if gettingPushed:
 			moves.pop_back()
 			moves.append(["PushRight", MOVECOUNT])
+		#if undoing and exploding:
+			
 	else:
 		MOVECOUNT += 1
 		moveCountChange.emit(MOVECOUNT)
@@ -278,6 +281,8 @@ func can_move_to(checkPos) -> bool:
 func undo():
 	undoing = true
 	if moves.size() > 0:
+		#Get each action for current MOVECOUNT. Loop through them. Will avoid the weird jank especially when not having an "Inactive" signal. Also means multiple events can happen at once.
+		
 		var action = moves.get(moves.size() - 1).get(0)
 		#MOVEMENT UNDO
 		if action == "MoveUp":
@@ -356,11 +361,12 @@ func undo():
 func explode(dir):
 	exploding = true
 	dead = true
+	exploded = true
 	#print("EXPLODING PLAYER IN DIRECTION:", dir)
 	#
 	##This might error or might not be necessary
 	#moves.pop_back()
-	moves.append(["Inactive", MOVECOUNT])
+	#moves.append(["Inactive", MOVECOUNT])
 	#
 	##TODO: Now might be a good time to implement a new undo system since this one is so damn broken. 
 	#
