@@ -83,7 +83,8 @@ func _unhandled_input(event):
 		
 	elif event.is_action_pressed("undoMove"):
 		print("Tried to undo")
-		undo()
+		if MOVECOUNT > 0:
+			undo()
 	update_animation_parameters()
 
 var inputs = {

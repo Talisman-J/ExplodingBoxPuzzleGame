@@ -9,7 +9,7 @@ var didMove = false
 var moves: Array = [] #Holds the position and the MOVECOUNT the box was moved on. 
 var initPos = position
 var gettingPushed = false
-
+var undoing = false
 
 var exploding = false
 
@@ -27,22 +27,22 @@ func _ready():
 	
 	
 func _on_moveCountChange(newMoveCount):
-	if newMoveCount < MOVECOUNT:
+	if newMoveCount <= MOVECOUNT:
 		# Check undo for if position is there.
-		print("Current BOX Movecount is: ", MOVECOUNT)
-		check_undo()
-		MOVECOUNT = newMoveCount
-		print("Current BOX Movecount is: ", MOVECOUNT)
+		
+		#TODO: Undo is off by one. Should make it so that increments by one in the movement function
+		# Decrement by one in the undo function.
+		while MOVECOUNT > newMoveCount:
+			check_undo()
 	else:
 		# Update for undo to be able to keep track of which move box was moved on. 
-		print("Current BOX Movecount is: ", MOVECOUNT)
 		MOVECOUNT = newMoveCount
-		print("Current BOX Movecount is: ", MOVECOUNT)
 	
 func push_box(direction) -> bool:
 	if moving:
 		return didMove # Prevent new movement until done with current one
-	
+	if didMove == true:
+		didMove = false
 	# Only react to key presses (no continuous movement)
 	if direction == "right":
 		input_vector = Vector2(1, 0)
@@ -68,7 +68,9 @@ func push_box(direction) -> bool:
 			print("BOX IS PUSHED ON THIS TURN")
 			moves.append(["MoveDown", MOVECOUNT])
 			didMove = true
-		
+	else:
+		print("NOTHING HAPPENED TO BOX")
+		didMove = false
 	print("PUSH BOX IS RUN HERE")
 	return didMove
 
@@ -216,6 +218,10 @@ func can_move_to(checkPos) -> bool:
 				if collidedNode.push_other(checkPos):
 					return true
 			else:
+				if (collidedNode.name == "Player" or collidedNode.name == "pushableBox" or collidedNode.name == "explodingBox") and undoing: 
+					# Allows the box to move back to its original position if undoing.
+					# Otherwise, it collides with the player as the box tries to undo before the player undoes.
+					return true
 				if collidedNode.name == "Player": 
 					return false
 				else:
@@ -247,53 +253,56 @@ func can_move_to(checkPos) -> bool:
 
 func getListActions(num):
 	var actions = []
+	#print("THIS IS CALLED WITH THE NUMBER: ", num - 1)
 	for move in moves:
-		if move.get(1) >= num:
+		if move.get(1) == (num - 1):
 			if move.get(0) == "Explode":
 				# So when undoing explosion logic is handled first before any movment/inaction/pushing logic. Prevents weirdness.
 				actions.insert(0, move) 
 			else:
-				print(move)
 				actions.append(move)
 	return actions
 	
 func check_undo():
 	var actions = getListActions(MOVECOUNT)
 	if actions.is_empty():
+		if MOVECOUNT > 0:
+			MOVECOUNT -= 1
 		return
 	else:
+		undoing = true
 		for action in actions:
 			if moves.size() > 0:
 				# Get each action for current MOVECOUNT. Loop through them. Will avoid the weird jank especially when not having an "Inactive" signal. 
 				# Also means multiple events can happen at once.
-				print("BOX ACTION is ", action, " AND MOVE COUNT IS ", MOVECOUNT)
+				print("TRYING TO UNDO THE ACTION: ", action[0])
 				#Undo Explosion
 				if action[0] == "Explode":
 					if action[3] == "up":
 						input_vector = Vector2(0, -1)
 						print(action[2])
-						for i in range(action[2]): # Gets the distance player travelled while exploding. 
+						for i in range(action[2]): # Gets the distance box travelled while exploding. 
 							moveDown()
 						
 						
 					if action[3] == "down":
 						input_vector = Vector2(0, 1)
 						print(action[2])
-						for i in range(action[2]): # Gets the distance player travelled while exploding. 
+						for i in range(action[2]): # Gets the distance box travelled while exploding. 
 							moveUp()
 						
 						
 					if action[3] == "right":
 						input_vector = Vector2(1, 0)
 						print(action[2])
-						for i in range(action[2]): # Gets the distance player travelled while exploding. 
+						for i in range(action[2]): # Gets the distance box travelled while exploding. 
 							moveLeft()
 						
 						
 					if action[3] == "left":
 						input_vector = Vector2(-1, 0)
 						print(action[2])
-						for i in range(action[2]): # Gets the distance player travelled while exploding. 
+						for i in range(action[2]): # Gets the distance box travelled while exploding. 
 							moveRight()
 						
 		
@@ -328,31 +337,76 @@ func check_undo():
 					input_vector = Vector2(-1, 0)
 					moveRight()
 				moves.pop_back()
-	
+		if MOVECOUNT > 0:
+			MOVECOUNT -= 1
+	undoing = false
 
 func explode(dir):
+	#exploding = true
+	#print(dir)
+	#if moves.size() <= 0:
+		#moves.append([position, MOVECOUNT - 1])
+	#if moves.size() > 0:
+		#var lastElement = moves[moves.size() - 1]
+		#if lastElement.get(1) != MOVECOUNT - 1:
+			#moves.append([position, MOVECOUNT - 1])
+	#
+	##print("Before explosion: ", MOVECOUNT - 1, " Movecount and ", position, " Position" )
+	#push_box(dir)
+	#if worked == true:
+		#moves.pop_back()
+	#push_box(dir)
+	#if worked == true:
+		#moves.pop_back()
+	##print(MOVECOUNT, " Movecount and ", position, " Position" )
+	#print("Box Blew UP")
+	#
+	#exploding = false
+	#reference instance at countdown of 1 instead of 0. Return to 1 when countdown returns to 1
+	print("EXPLODED ON MOVE: ", MOVECOUNT)
 	exploding = true
-	print(dir)
-	if moves.size() <= 0:
-		moves.append([position, MOVECOUNT - 1])
-	if moves.size() > 0:
-		var lastElement = moves[moves.size() - 1]
-		if lastElement.get(1) != MOVECOUNT - 1:
-			moves.append([position, MOVECOUNT - 1])
+	#dead = true
+	#exploded = true
+
 	
-	#print("Before explosion: ", MOVECOUNT - 1, " Movecount and ", position, " Position" )
-	push_box(dir)
-	if worked == true:
-		moves.pop_back()
-	push_box(dir)
-	if worked == true:
-		moves.pop_back()
-	#print(MOVECOUNT, " Movecount and ", position, " Position" )
-	print("Box Blew UP")
+	var distance = 0
+	if can_move_to(dir):
+		moveAuto(dir)
+		distance += 1
+	if can_move_to(dir):
+		moveAuto(dir)
+		distance += 1
+	print("Explode" + dir)
+	print(distance)
+	moves.append(["Explode", MOVECOUNT - 1, distance, dir])
 	
 	exploding = false
-	#reference instance at countdown of 1 instead of 0. Return to 1 when countdown returns to 1
 	
 	#ISSUE HERE:
 	#Saves the position of before explosion and after on the same turn. 
 	#Have a prepare signal that sends warning at countdown of 1 and saves. 
+	
+	
+	
+func push_other(direction) -> bool:
+	if moving:
+		return didMove # Prevent new movement until done with current one
+	gettingPushed = true #Likely not necessary. Have this in case I need it later. 
+	if direction == "right":
+		input_vector = Vector2(1, 0)
+		moveRight()
+		moves.append(["PushRight", MOVECOUNT - 1])
+	elif direction == "left":
+		input_vector = Vector2(-1, 0)
+		moveLeft()
+		moves.append(["PushLeft", MOVECOUNT - 1])
+	elif direction == "up":
+		input_vector = Vector2(0, -1)
+		moveUp()
+		moves.append(["PushUp", MOVECOUNT - 1])
+	elif direction == "down":
+		input_vector = Vector2(0, 1)
+		moveDown()
+		moves.append(["PushDown", MOVECOUNT - 1])
+	gettingPushed = false
+	return didMove
