@@ -32,7 +32,7 @@ func _on_moveCountChange(newMoveCount):
 		
 
 func undoExplode():
-	print("explodedOn: ", movedOn, " + MOVECOUNT: ", MOVECOUNT)
+	#print("explodedOn: ", movedOn, " + MOVECOUNT: ", MOVECOUNT)
 	if (movedOn - 1) == MOVECOUNT:
 		self.visible = true
 		exploded = false

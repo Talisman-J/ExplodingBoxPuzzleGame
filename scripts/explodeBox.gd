@@ -124,17 +124,15 @@ func updateExplosionTimer(num):
 			# To replicate, get exploded. undo. get exploded again. Undo doesn't work. 
 			#print("TEMP COUNTDOWN IS:", tempCountdown)
 			if tempCountdown == 1 and firstMove == true:
-				print("THIS IS TRUE ACTUALLY")
 				await self.finishedVisualExplosion
 			self.visible = true
-			print("VISIBLE IS TRUEEEEEEEEEEEEE")
 			if tempCountdown >= 1:
 				#self.visible = true
-				print("DOES THIS EVER RUNNNNNNNNN??????")
 				$CollisionShape2D.disabled = false
 				exploded = false
 				$Fire.visible = false
 				firstMove = true
+				return
 		firstMove = false
 	elif tempCountdown >= countdown:
 		tempCountdown = countdown
@@ -149,11 +147,7 @@ func initExplosionTimer():
 	textDisplay.text = str(countdown)
 
 
-#var alreadyDidInc = false    #UNUSED!!!!
-#func tryIncreaseMoveCount():
-	#if alreadyDidInc == false:
-		#player.incrementMoveCount()
-		#alreadyDidInc = true
+
 signal finishedVisualExplosion() #finishedVis
 func explode():
 	#Change the name of this method to something else so that exploding boxes can blow up each other. 
@@ -162,7 +156,7 @@ func explode():
 		#TODO: In the future for visual effect, hold this fire and an exploding barrel for a frame until player advances next turn for visual pleasantness.
 		var temporaryMoveCount = MOVECOUNT
 		#await player.moveCountChange
-		#await get_tree().create_timer(.05).timeout
+		await get_tree().create_timer(.05).timeout
 		#self.visible = false
 		exploded = true
 		$CollisionShape2D.disabled = true
@@ -190,7 +184,7 @@ func explode():
 				object.explode(input) #Make sure this is implemented in every object. Might want to add direction param
 		await player.moveCountChange
 		self.visible = false
-		print("VISIBLE IS FALSEEEEEEEEEEE")
+		#print("VISIBLE IS FALSEEEEEEEEEEE")
 		finishedVisualExplosion.emit()
 		
 		#Explode when undone while still visible makes the box invisible. 
