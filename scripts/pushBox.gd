@@ -27,15 +27,17 @@ func _ready():
 	
 	
 func _on_moveCountChange(newMoveCount):
-	if newMoveCount <= MOVECOUNT:
+	if newMoveCount < MOVECOUNT:
 		# Check undo for if position is there.
+		print("Current BOX Movecount is: ", MOVECOUNT)
 		check_undo()
 		MOVECOUNT = newMoveCount
-		#print("Current Movecount is: ", MOVECOUNT)
+		print("Current BOX Movecount is: ", MOVECOUNT)
 	else:
 		# Update for undo to be able to keep track of which move box was moved on. 
+		print("Current BOX Movecount is: ", MOVECOUNT)
 		MOVECOUNT = newMoveCount
-		#print("Current Movecount is: ", MOVECOUNT)
+		print("Current BOX Movecount is: ", MOVECOUNT)
 	
 func push_box(direction) -> bool:
 	if moving:
@@ -243,8 +245,90 @@ func can_move_to(checkPos) -> bool:
 		#currPos = initPos
 		#self.position = initPos
 
+func getListActions(num):
+	var actions = []
+	for move in moves:
+		if move.get(1) >= num:
+			if move.get(0) == "Explode":
+				# So when undoing explosion logic is handled first before any movment/inaction/pushing logic. Prevents weirdness.
+				actions.insert(0, move) 
+			else:
+				print(move)
+				actions.append(move)
+	return actions
+	
 func check_undo():
-	pass
+	var actions = getListActions(MOVECOUNT)
+	if actions.is_empty():
+		return
+	else:
+		for action in actions:
+			if moves.size() > 0:
+				# Get each action for current MOVECOUNT. Loop through them. Will avoid the weird jank especially when not having an "Inactive" signal. 
+				# Also means multiple events can happen at once.
+				print("BOX ACTION is ", action, " AND MOVE COUNT IS ", MOVECOUNT)
+				#Undo Explosion
+				if action[0] == "Explode":
+					if action[3] == "up":
+						input_vector = Vector2(0, -1)
+						print(action[2])
+						for i in range(action[2]): # Gets the distance player travelled while exploding. 
+							moveDown()
+						
+						
+					if action[3] == "down":
+						input_vector = Vector2(0, 1)
+						print(action[2])
+						for i in range(action[2]): # Gets the distance player travelled while exploding. 
+							moveUp()
+						
+						
+					if action[3] == "right":
+						input_vector = Vector2(1, 0)
+						print(action[2])
+						for i in range(action[2]): # Gets the distance player travelled while exploding. 
+							moveLeft()
+						
+						
+					if action[3] == "left":
+						input_vector = Vector2(-1, 0)
+						print(action[2])
+						for i in range(action[2]): # Gets the distance player travelled while exploding. 
+							moveRight()
+						
+		
+				#MOVEMENT UNDO
+				if action[0] == "MoveUp":
+					input_vector = Vector2(0, -1)
+					moveDown()
+					
+				if action[0] == "MoveDown":
+					input_vector = Vector2(0, 1)
+					moveUp()
+					
+				if action[0] == "MoveRight":
+					input_vector = Vector2(1, 0)
+					moveLeft()
+					
+				if action[0] == "MoveLeft":
+					input_vector = Vector2(-1, 0)
+					moveRight()
+					
+				#PUSHED UNDO 
+				if action[0] == "PushUp":
+					input_vector = Vector2(0, -1)
+					moveDown()
+				if action[0] == "PushDown":
+					input_vector = Vector2(0, 1)
+					moveUp()
+				if action[0] == "PushRight":
+					input_vector = Vector2(1, 0)
+					moveLeft()
+				if action[0] == "PushLeft":
+					input_vector = Vector2(-1, 0)
+					moveRight()
+				moves.pop_back()
+	
 
 func explode(dir):
 	exploding = true
