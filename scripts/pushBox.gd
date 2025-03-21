@@ -229,20 +229,22 @@ func can_move_to(checkPos) -> bool:
 
 #This way it stores only the necessary stuff and only calls it when necessary to hopefully be at least somewhat efficient. 
 
-func check_undo():
-	#print("Size of moves is: ", moves.size())
-	if moves.size() > 0:
-		var currListItem = moves.get(moves.size() - 1)
-		#print("OUTSIDE the if statement: ",currListItem.get(1))
-		if (MOVECOUNT - 1) == currListItem.get(1):
-			#print("Inside the if statement: ",currListItem.get(1))
-			moves.pop_back()
-			currPos = currListItem.get(0)
-			self.position += (currPos - position)
-	if moves.size() == 0:
-		currPos = initPos
-		self.position = initPos
+#func check_undo():
+	##print("Size of moves is: ", moves.size())
+	#if moves.size() > 0:
+		#var currListItem = moves.get(moves.size() - 1)
+		##print("OUTSIDE the if statement: ",currListItem.get(1))
+		#if (MOVECOUNT - 1) == currListItem.get(1):
+			##print("Inside the if statement: ",currListItem.get(1))
+			#moves.pop_back()
+			#currPos = currListItem.get(0)
+			#self.position += (currPos - position)
+	#if moves.size() == 0:
+		#currPos = initPos
+		#self.position = initPos
 
+func check_undo():
+	pass
 
 func explode(dir):
 	exploding = true
