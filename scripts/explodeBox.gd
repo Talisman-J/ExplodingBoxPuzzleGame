@@ -181,7 +181,7 @@ func explode():
 				else:
 					break
 			for object in hitObjects:
-				object.explode(input) #Make sure this is implemented in every object. Might want to add direction param
+				object.explode(input) #Make sure this is implemented in every object. 
 		await player.moveCountChange
 		self.visible = false
 		#print("VISIBLE IS FALSEEEEEEEEEEE")

@@ -44,69 +44,161 @@ func push_box(direction) -> bool:
 	# Only react to key presses (no continuous movement)
 	if direction == "right":
 		input_vector = Vector2(1, 0)
-		attempt_move("right")
+		if moveRight():
+			print("BOX IS PUSHED ON THIS TURN")
+			moves.append(["MoveRight", MOVECOUNT])
+			didMove = true
 	elif direction == "left":
 		input_vector = Vector2(-1, 0)
-		attempt_move("left")
+		if moveLeft():
+			print("BOX IS PUSHED ON THIS TURN")
+			moves.append(["MoveLeft", MOVECOUNT])
+			didMove = true
 	elif direction == "up":
 		input_vector = Vector2(0, -1)
-		attempt_move("up")
+		if moveUp():
+			print("BOX IS PUSHED ON THIS TURN")
+			moves.append(["MoveUp", MOVECOUNT])
+			didMove = true
 	elif direction == "down":
 		input_vector = Vector2(0, 1)
-		attempt_move("down")
+		if moveDown():
+			print("BOX IS PUSHED ON THIS TURN")
+			moves.append(["MoveDown", MOVECOUNT])
+			didMove = true
 		
 	print("PUSH BOX IS RUN HERE")
 	return didMove
 
 #Handles if the box is pushed during an explosion
-func push_other(direction) -> bool:
-	if moving:
-		return didMove # Prevent new movement until done with current one
-	gettingPushed = true
-	moves.append([position, MOVECOUNT - 1])
-	# Only react to key presses (no continuous movement)
-	if direction == "right":
-		input_vector = Vector2(1, 0)
-		attempt_move("right")
-	elif direction == "left":
-		input_vector = Vector2(-1, 0)
-		attempt_move("left")
-	elif direction == "up":
-		input_vector = Vector2(0, -1)
-		attempt_move("up")
-	elif direction == "down":
-		input_vector = Vector2(0, 1)
-		attempt_move("down")
-	gettingPushed = false
-	print("PUSH OTHER IS RUN HERE")
-	#moves.append([position, MOVECOUNT])
-	return didMove
+#func push_other(direction) -> bool:
+	#if moving:
+		#return didMove # Prevent new movement until done with current one
+	#gettingPushed = true
+	#moves.append([position, MOVECOUNT - 1])
+	## Only react to key presses (no continuous movement)
+	#if direction == "right":
+		#input_vector = Vector2(1, 0)
+		##attempt_move("right")
+	#elif direction == "left":
+		#input_vector = Vector2(-1, 0)
+		##attempt_move("left")
+	#elif direction == "up":
+		#input_vector = Vector2(0, -1)
+		##attempt_move("up")
+	#elif direction == "down":
+		#input_vector = Vector2(0, 1)
+		##attempt_move("down")
+	#gettingPushed = false
+	#print("PUSH OTHER IS RUN HERE")
+	##moves.append([position, MOVECOUNT])
+	#return didMove
 
-func attempt_move(direction):
-	if didMove == true:
-		didMove = false # shitty code
-		
-	var target_pos = currPos + input_vector * TILE_SIZE
-	if can_move_to(direction):
-		currPos = target_pos
-		moving = true # Lock until move completes
-		didMove = true
-		moves.append([position, MOVECOUNT])
-		worked = true
-		if gettingPushed == true:
-			print("BOX IS GETTING PUSHED BY EXPLOSION")
-			moves.pop_back()
+func moveUp():
+	moving = true
+	var targPos = currPos + inputs["up"] * TILE_SIZE
+	if can_move_to("up"):
+		currPos = targPos
+		position = currPos
+		moving = false
+		return true
 	else:
-		worked = false
-	position = currPos
-	moving = false 
+		return false
+		#moves.pop_back() #Gets rid of the movement appending and replaces it with inaction
+		#moves.append(["Inaction", MOVECOUNT])
+	##update_animation_parameters()
+	#moving = false
 	
+func moveDown():
+	moving = true
+	var targPos = currPos + inputs["down"] * TILE_SIZE
+	if can_move_to("down"):
+		currPos = targPos
+		position = currPos
+		moving = false
+		return true
+	else:
+		return false
+		#moves.pop_back() #Gets rid of the movement appending and replaces it with inaction
+		#moves.append(["Inaction", MOVECOUNT])
+	##update_animation_parameters()
+	#moving = false
+	
+func moveLeft():
+	moving = true
+	var targPos = currPos + inputs["left"] * TILE_SIZE
+	if can_move_to("left"):
+		currPos = targPos
+		position = currPos
+		moving = false
+		return true
+	else:
+		return false
+		#moves.pop_back() #Gets rid of the movement appending and replaces it with inaction
+		#moves.append(["Inaction", MOVECOUNT])
+	#update_animation_parameters()
+	#moving = false
+	
+func moveRight():
+	moving = true
+	var targPos = currPos + inputs["right"] * TILE_SIZE
+	if can_move_to("right"):
+		currPos = targPos
+		position = currPos
+		moving = false
+		return true
+	else:
+		return false
+		#moves.pop_back() #Gets rid of the movement appending and replaces it with inaction
+		#moves.append(["Inaction", MOVECOUNT])
+	##update_animation_parameters()
+	#moving = false
+
+func moveAuto(dir):
+	if(dir == "up"):
+		moveUp()
+	if(dir == "down"):
+		moveDown()
+	if(dir == "left"):
+		moveLeft()
+	if(dir == "right"):
+		moveRight()
+
+
+
+#func attempt_move(direction):
+	#if didMove == true:
+		#didMove = false # shitty code
+		#
+	#var target_pos = currPos + input_vector * TILE_SIZE
+	#if can_move_to(direction):
+		#currPos = target_pos
+		#moving = true # Lock until move completes
+		#didMove = true
+		#moves.append([position, MOVECOUNT])
+		#worked = true
+		#if gettingPushed == true:
+			#print("BOX IS GETTING PUSHED BY EXPLOSION")
+			#moves.pop_back()
+	#else:
+		#worked = false
+	#position = currPos
+	#moving = false 
+	
+
+
+
+
+
 
 var inputs = {
 	"right": Vector2.RIGHT,
 	"left": Vector2.LEFT,
 	"up": Vector2.UP,
 	"down": Vector2.DOWN}
+	
+	
+	
 	
 func can_move_to(checkPos) -> bool:
 	var angleDir = inputs[checkPos].angle()

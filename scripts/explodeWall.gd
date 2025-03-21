@@ -47,28 +47,3 @@ func explode(_dir):
 		$CollisionShape2D.disabled = true
 		movedOn = MOVECOUNT
 		print("Wall exploded!")
-	
-	#Likely places to error: In the case that 2 objects are in 1 raycast
-	#Intended behaviour: Push back one first, then closest second. 
-	#Object exploded should be pushed back 2, whether they are on first or second tile exploded. This means different distance can be reached with corpse.
-	
-	
-	#Shoot out raycast in 4 directions 32 px. Detect collisions with non walls. Break breakable walls. Kill player. Push playercorpse and boxes. 
-	
-	#set_cell
-	
-#	Kill player
-#	Check if corpse can move.
-#	If can:
-		#Move corpse away from explosion one.
-		#Check if it can move again:
-			#If so move back again
-			#Save position of corpse in undo function. Only increment moves by one.
-		#If not:
-			#Save position of corpse in undo function. Only increment moves by one. 
-	
-	#This will require an exploding state for the box and the player. Uses raycast similar to just normal checks. If player, pushes. If not stops. If box, pushes. If not stops. 
-	#Have edge case for box hitting player into wall breaking wall killing player. Doesn't kill normally, just pushes. 
-	#When enemies show up many more edge cases. Player hit by enemy dies. 
-#	
-	pass

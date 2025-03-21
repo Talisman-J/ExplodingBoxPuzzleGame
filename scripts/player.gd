@@ -27,6 +27,10 @@ var undoing = false
 
 #TODO: If two enemies or an enemy and player run into box at same time, explode it. Have a little message that says "Turns out these boxes have gunpowder in them too..." 
 
+#TODO: Fix the bug where undo pushes the box overriding the undid movement!!!!
+# Maybe turn off collision of box while undoing??
+
+
 
 
 signal moveCountChange(newMoveCount)
@@ -138,8 +142,6 @@ func moveRight():
 	#update_animation_parameters()
 	moving = false
 
-
-
 func moveAuto(dir):
 	if(dir == "up"):
 		moveUp()
@@ -152,27 +154,6 @@ func moveAuto(dir):
 
 
 
-
-
-#func attempt_move(direction):
-	#if exploding:
-		#input_vector = inputs[direction]
-	#var target_pos = currPos + input_vector * TILE_SIZE
-	#
-	#if can_move_to(direction):
-		#currPos = target_pos
-		##setMovingTrue() 
-		#position = currPos
-	#if gettingPushed == false and exploding == false:
-		#moves.append([position, input_vector])
-		#MOVECOUNT += 1
-		#moveCountChange.emit(MOVECOUNT)
-		#if dead == true:
-			#turnsSinceDeath += 1
-	#update_animation_parameters()
-	#if !exploding:
-		#setMovingFalse()
-
 func update_animation_parameters():
 	# Update blend position (for direction)
 	animation_tree["parameters/Idle/blend_position"] = input_vector
@@ -184,6 +165,7 @@ func update_animation_parameters():
 	#else:
 		#animation_tree["parameters/playback"].travel("Walk")
 	
+
 func can_move_to(checkPos) -> bool:
 	var angleDir = inputs[checkPos].angle()
 	ray.rotation = angleDir + PI/2
@@ -213,8 +195,10 @@ func getListActions(num):
 	return actions
 	
 func undo():
+	MOVECOUNT -= 1
+	moveCountChange.emit(MOVECOUNT)
 	print(MOVECOUNT)
-	var actions = getListActions(MOVECOUNT - 1)
+	var actions = getListActions(MOVECOUNT)
 	if actions.is_empty():
 		return
 	else:
@@ -259,21 +243,17 @@ func undo():
 					input_vector = Vector2(0, -1)
 					moveDown()
 					
-					
 				if action[0] == "MoveDown":
 					input_vector = Vector2(0, 1)
 					moveUp()
-					
 					
 				if action[0] == "MoveRight":
 					input_vector = Vector2(1, 0)
 					moveLeft()
 					
-					
 				if action[0] == "MoveLeft":
 					input_vector = Vector2(-1, 0)
 					moveRight()
-					
 					
 				#PUSHED UNDO 
 				if action[0] == "PushUp":
@@ -295,8 +275,8 @@ func undo():
 					pass
 				
 				moves.pop_back()
-		MOVECOUNT -= 1
-		moveCountChange.emit(MOVECOUNT)
+		#MOVECOUNT -= 1
+		#moveCountChange.emit(MOVECOUNT)
 	undoing = false
 	
 	
@@ -321,6 +301,8 @@ func explode(dir):
 	print(distance)
 	moves.append(["Explode", MOVECOUNT, distance, dir])
 	
+	# TODO: Make explode box have a continous check for things entering its radius on that movecount. This is so stuff can be chained. 
+	
 	exploding = false
 	
 	MOVECOUNT += 1
@@ -331,7 +313,7 @@ func explode(dir):
 func push_other(direction) -> bool:
 	if moving:
 		return didMove # Prevent new movement until done with current one
-	gettingPushed = true
+	gettingPushed = true #Likely not necessary. Have this in case I need it later. 
 	if direction == "right":
 		input_vector = Vector2(1, 0)
 		moveRight()
