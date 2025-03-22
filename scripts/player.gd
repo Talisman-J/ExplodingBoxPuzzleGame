@@ -22,6 +22,8 @@ var undoing = false
 
 
 
+
+
 #TODO: Make explosions that go off at the same time all affect the player/boxes.
 #TODO: Make it so that the player can still press movement keys to advance turns but just can't move. 
 
@@ -42,7 +44,7 @@ signal moveCountChange(newMoveCount)
 const TILE_SIZE = 16
 
 func _unhandled_input(event):
-	print(MOVECOUNT, " THE MOVECOUNT IS CURRENTLY THIS!!!")
+	#print(MOVECOUNT, " THE MOVECOUNT IS CURRENTLY THIS!!!")
 	if moving == true:
 		return
 	if event.is_action_pressed("ui_right"):

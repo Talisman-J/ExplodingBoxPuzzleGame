@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://5lpa4tlr0djd"]
+[gd_scene load_steps=26 format=3 uid="uid://5lpa4tlr0djd"]
 
 [ext_resource type="Texture2D" uid="uid://bqtn7d8rukmxy" path="res://assets/Small-8-Direction-Characters_by_AxulArt/Small-8-Direction-Characters_by_AxulArt.png" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://ci504nd1ok6wl" path="res://scripts/player.gd" id="1_g2els"]
@@ -228,7 +228,11 @@ states/Idle/position = Vector2(529, 130)
 states/Walk/node = SubResource("AnimationNodeBlendSpace2D_i4ail")
 states/Walk/position = Vector2(376, 130)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
+size = Vector2(10, 10)
+
 [node name="Player" type="CharacterBody2D" groups=["PlayerBody"]]
+top_level = true
 collision_layer = 2
 collision_mask = 2
 script = ExtResource("1_g2els")
@@ -260,3 +264,9 @@ parameters/Walk/blend_position = Vector2(-0.993182, 0.0142858)
 [node name="RayCast2D" type="RayCast2D" parent="."]
 target_position = Vector2(0, -16)
 collision_mask = 15
+
+[node name="CamArea" type="Area2D" parent="."]
+
+[node name="CamCollider" type="CollisionShape2D" parent="CamArea"]
+shape = SubResource("RectangleShape2D_g2els")
+debug_color = Color(0.797039, 0.249487, 0.84479, 0.42)
