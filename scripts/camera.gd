@@ -1,17 +1,4 @@
 extends Camera2D
-
-
-func _ready():
-	#var newPos = Vector2(0, 208)
-	#position = position + newPos
-	pass
-
-
-
-
-
-
-
 #Moves the camera up
 func _on_area_up_area_entered(area: Area2D) -> void:
 	if area.name == "CamArea":
