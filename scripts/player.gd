@@ -87,6 +87,14 @@ func _unhandled_input(event):
 		#print("Tried to undo")
 		if MOVECOUNT > 0:
 			undo()
+			
+	elif event.is_action_pressed("PrintSolutionMap"):
+		# "p"
+		printMovesSoFar()
+	elif event.is_action_pressed("RunCustomSolution"):
+		# "u"
+		runCustomSolution()
+		
 	update_animation_parameters()
 
 var inputs = {
@@ -336,4 +344,54 @@ func push_other(direction) -> bool:
 		moves.append(["PushDown", MOVECOUNT - 1])
 	gettingPushed = false
 	return didMove
+	
+	
+	
+func printMovesSoFar():
+	var fullListOfMoves = ""
+	for move in moves:
+		fullListOfMoves += str(move) + ","
+	print(fullListOfMoves)
+	
+func runCustomSolution():
+	var customSolution = [["MoveUp", 0],["MoveUp", 1],["MoveUp", 2],["MoveDown", 3],["MoveDown", 4],["MoveUp", 5],["MoveUp", 6],["MoveUp", 7],["MoveLeft", 8],["MoveLeft", 9],["MoveDown", 10],["MoveDown", 11],["MoveDown", 12],["MoveDown", 13],["MoveDown", 14],["MoveDown", 15],["MoveLeft", 16],["MoveLeft", 17],["MoveLeft", 18],["MoveLeft", 19],["MoveUp", 20],["MoveUp", 21],["MoveUp", 22],["MoveLeft", 23],["MoveUp", 24],["MoveLeft", 25],["MoveLeft", 26],["MoveDown", 27],["MoveRight", 28],["MoveRight", 29],["MoveUp", 30],["MoveDown", 31],["MoveRight", 32],["MoveRight", 33],["MoveRight", 34],["MoveRight", 35],["MoveLeft", 36],["MoveLeft", 37],["MoveLeft", 38],["MoveLeft", 39],["MoveUp", 40],["MoveLeft", 41],["MoveUp", 42],["MoveUp", 43],["MoveUp", 44],["MoveRight", 45],["MoveRight", 46],["MoveDown", 47],["MoveDown", 48],["MoveDown", 49],["MoveLeft", 50],["MoveDown", 51],["MoveRight", 52],["MoveRight", 53],["MoveRight", 54],["MoveRight", 55],["MoveRight", 56],["MoveRight", 57],["MoveLeft", 58],["MoveLeft", 59],["MoveLeft", 60],["MoveLeft", 61],["MoveLeft", 62],["MoveLeft", 63],["MoveLeft", 64],["MoveLeft", 65],["MoveLeft", 66],["MoveUp", 67],["MoveUp", 68],["MoveUp", 69],["MoveRight", 70],["MoveUp", 71],["MoveRight", 72],["MoveDown", 73],["MoveDown", 74],["MoveDown", 75],["MoveLeft", 76],["MoveDown", 77],["MoveRight", 78],["MoveRight", 79],["MoveRight", 80],["MoveRight", 81],["MoveRight", 82],["MoveRight", 83],["MoveRight", 84],["MoveRight", 85],["MoveRight", 86],["MoveRight", 87],["MoveRight", 88],["MoveRight", 89],["MoveDown", 90],["MoveRight", 91],["MoveUp", 92],["MoveUp", 93],["MoveUp", 94],["MoveDown", 95],["MoveDown", 96],["MoveLeft", 97]]
+	
+	for solut in customSolution:
+		await get_tree().create_timer(.05).timeout
+		if solut.get(0) == "MoveRight":
+			input_vector = Vector2(1, 0)
+			#THIS ORDER IS IMPORTANT.
+			#In the case of an Inaction move being recorded, it pops the movement from the list and replaces it. This always has to be appened before movement. 
+			moves.append(["MoveRight", MOVECOUNT])
+			moveRight()
+			MOVECOUNT += 1
+			moveCountChange.emit(MOVECOUNT)
+			
+		elif solut.get(0) == "MoveLeft":
+			input_vector = Vector2(-1, 0)
+			#THIS ORDER IS IMPORTANT.
+			#In the case of an Inaction move being recorded, it pops the movement from the list and replaces it. This always has to be appened before movement. 
+			moves.append(["MoveLeft", MOVECOUNT])
+			moveLeft()
+			MOVECOUNT += 1
+			moveCountChange.emit(MOVECOUNT)
+			
+		elif solut.get(0) == "MoveUp":
+			input_vector = Vector2(0, -1)
+			#THIS ORDER IS IMPORTANT.
+			#In the case of an Inaction move being recorded, it pops the movement from the list and replaces it. This always has to be appened before movement. 
+			moves.append(["MoveUp", MOVECOUNT])
+			moveUp()
+			MOVECOUNT += 1
+			moveCountChange.emit(MOVECOUNT)
+			
+		elif solut.get(0) == "MoveDown":
+			input_vector = Vector2(0, 1)
+			#THIS ORDER IS IMPORTANT.
+			#In the case of an Inaction move being recorded, it pops the movement from the list and replaces it. This always has to be appened before movement. 
+			moves.append(["MoveDown", MOVECOUNT])
+			moveDown()
+			MOVECOUNT += 1
+			moveCountChange.emit(MOVECOUNT)
+	
 	
