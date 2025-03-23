@@ -1,9 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://dhikk887yojmk"]
+[gd_scene load_steps=5 format=3 uid="uid://dhikk887yojmk"]
 
 [ext_resource type="Script" uid="uid://d8gvko434gbn" path="res://scripts/pushBox.gd" id="1_bld75"]
 [ext_resource type="Texture2D" uid="uid://cxn0k05mgd62y" path="res://assets/SciAssets/SciSpriteSheet.png" id="2_bld75"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lnu2h"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bld75"]
+size = Vector2(10, 10)
 
 [node name="Boxes" type="Node2D"]
 
@@ -26,3 +29,10 @@ region_rect = Rect2(16, 0, 16, 16)
 [node name="RayCast2D" type="RayCast2D" parent="pushableBox"]
 target_position = Vector2(0, -16)
 collision_mask = 15
+collide_with_areas = true
+
+[node name="BoxArea" type="Area2D" parent="pushableBox"]
+
+[node name="BoxDetect" type="CollisionShape2D" parent="pushableBox/BoxArea"]
+shape = SubResource("RectangleShape2D_bld75")
+debug_color = Color(0.767627, 0.220663, 0.946216, 0.42)

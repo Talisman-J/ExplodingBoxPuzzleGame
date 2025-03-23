@@ -84,7 +84,7 @@ func _unhandled_input(event):
 		moveCountChange.emit(MOVECOUNT)
 		
 	elif event.is_action_pressed("undoMove"):
-		print("Tried to undo")
+		#print("Tried to undo")
 		if MOVECOUNT > 0:
 			undo()
 	update_animation_parameters()
@@ -175,13 +175,14 @@ func can_move_to(checkPos) -> bool:
 	ray.force_raycast_update()
 	
 	if !ray.is_colliding():
-		print("Should be able to move")
+		#print("Should be able to move")
 		return true
 	else:
 		var collidedNode = ray.get_collider()
+		print(collidedNode.name)
 		if collidedNode.name == "pushableBox" or collidedNode.name == "explodingBox":
 			if collidedNode.push_box(checkPos):
-				print("Should be able to move X2")
+				#print("Should be able to move X2")
 				return true
 		return false
 		
@@ -200,7 +201,7 @@ func getListActions(num):
 func undo():
 	MOVECOUNT -= 1
 	moveCountChange.emit(MOVECOUNT)
-	print(MOVECOUNT)
+	#print(MOVECOUNT)
 	var actions = getListActions(MOVECOUNT)
 	if actions.is_empty():
 		return
@@ -210,33 +211,33 @@ func undo():
 			if moves.size() > 0:
 				# Get each action for current MOVECOUNT. Loop through them. Will avoid the weird jank especially when not having an "Inactive" signal. 
 				# Also means multiple events can happen at once.
-				print("ACTION is ", action, " AND MOVE COUNT IS ", MOVECOUNT)
+				#print("ACTION is ", action, " AND MOVE COUNT IS ", MOVECOUNT)
 				#Undo Explosion
 				if action[0] == "Explode":
 					if action[3] == "up":
 						input_vector = Vector2(0, -1)
-						print(action[2])
+						#print(action[2])
 						for i in range(action[2]): # Gets the distance player travelled while exploding. 
 							moveDown()
 						exploded = false
 						
 					if action[3] == "down":
 						input_vector = Vector2(0, 1)
-						print(action[2])
+						#print(action[2])
 						for i in range(action[2]): # Gets the distance player travelled while exploding. 
 							moveUp()
 						exploded = false
 						
 					if action[3] == "right":
 						input_vector = Vector2(1, 0)
-						print(action[2])
+						#print(action[2])
 						for i in range(action[2]): # Gets the distance player travelled while exploding. 
 							moveLeft()
 						exploded = false
 						
 					if action[3] == "left":
 						input_vector = Vector2(-1, 0)
-						print(action[2])
+						#print(action[2])
 						for i in range(action[2]): # Gets the distance player travelled while exploding. 
 							moveRight()
 						exploded = false
@@ -287,7 +288,7 @@ func undo():
 func explode(dir):
 	MOVECOUNT -= 1 #Because moving/inactivity increments move count each time, need to subtract so that explosion can take place on proper turn. 
 	
-	print("EXPLODED ON MOVE: ", MOVECOUNT)
+	#print("EXPLODED ON MOVE: ", MOVECOUNT)
 	exploding = true
 	dead = true
 	exploded = true
@@ -300,8 +301,8 @@ func explode(dir):
 	if can_move_to(dir):
 		moveAuto(dir)
 		distance += 1
-	print("Explode" + dir)
-	print(distance)
+	#print("Explode" + dir)
+	#print(distance)
 	moves.append(["Explode", MOVECOUNT, distance, dir])
 	
 	# TODO: Make explode box have a continous check for things entering its radius on that movecount. This is so stuff can be chained. 
