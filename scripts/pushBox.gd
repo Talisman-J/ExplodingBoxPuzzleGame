@@ -275,7 +275,7 @@ func check_undo():
 			if moves.size() > 0:
 				# Get each action for current MOVECOUNT. Loop through them. Will avoid the weird jank especially when not having an "Inactive" signal. 
 				# Also means multiple events can happen at once.
-				print("TRYING TO UNDO THE ACTION: ", action[0])
+				#print("TRYING TO UNDO THE ACTION: ", action[0])
 				#Undo Explosion
 				if action[0] == "Explode":
 					if action[3] == "up":
@@ -363,7 +363,7 @@ func explode(dir):
 	#
 	#exploding = false
 	#reference instance at countdown of 1 instead of 0. Return to 1 when countdown returns to 1
-	print("EXPLODED ON MOVE: ", MOVECOUNT)
+	#print("EXPLODED ON MOVE: ", MOVECOUNT)
 	exploding = true
 	#dead = true
 	#exploded = true
@@ -376,8 +376,8 @@ func explode(dir):
 	if can_move_to(dir):
 		moveAuto(dir)
 		distance += 1
-	print("Explode" + dir)
-	print(distance)
+	#print("Explode" + dir)
+	#print(distance)
 	moves.append(["Explode", MOVECOUNT - 1, distance, dir])
 	
 	exploding = false

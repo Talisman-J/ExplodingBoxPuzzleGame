@@ -1,0 +1,61 @@
+[gd_scene load_steps=5 format=3 uid="uid://be5q8a6638q5j"]
+
+[ext_resource type="Script" uid="uid://q7nubblr50yd" path="res://scripts/door_and_plate.gd" id="1_7mywq"]
+[ext_resource type="Texture2D" uid="uid://cxn0k05mgd62y" path="res://assets/SciAssets/SciSpriteSheet.png" id="2_cadng"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vtaks"]
+size = Vector2(10, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kvpfn"]
+size = Vector2(10, 10)
+
+[node name="DoorAndPlate" type="Node2D"]
+show_behind_parent = true
+light_mask = 2
+visibility_layer = 2
+z_index = -1
+script = ExtResource("1_7mywq")
+
+[node name="PlateArea" type="Area2D" parent="."]
+show_behind_parent = true
+collision_layer = 0
+collision_mask = 15
+monitorable = false
+
+[node name="Plate" type="CollisionShape2D" parent="PlateArea"]
+show_behind_parent = true
+light_mask = 2
+visibility_layer = 2
+shape = SubResource("RectangleShape2D_vtaks")
+
+[node name="PlateSprite" type="Sprite2D" parent="PlateArea"]
+modulate = Color(1, 0.768627, 1, 1)
+show_behind_parent = true
+light_mask = 16
+visibility_layer = 16
+texture = ExtResource("2_cadng")
+region_enabled = true
+region_rect = Rect2(32, 0, 16, 16)
+
+[node name="DoorArea" type="Area2D" parent="."]
+position = Vector2(-16, -16)
+collision_layer = 2
+collision_mask = 2
+
+[node name="DoorColl" type="CollisionShape2D" parent="DoorArea"]
+show_behind_parent = true
+light_mask = 2
+visibility_layer = 2
+shape = SubResource("RectangleShape2D_kvpfn")
+
+[node name="DoorSprite" type="Sprite2D" parent="DoorArea"]
+modulate = Color(1, 0, 1, 1)
+show_behind_parent = true
+light_mask = 2
+visibility_layer = 2
+texture = ExtResource("2_cadng")
+region_enabled = true
+region_rect = Rect2(80, 32, 16, 16)
+
+[connection signal="area_entered" from="PlateArea" to="." method="_on_plate_area_area_entered"]
+[connection signal="area_exited" from="PlateArea" to="." method="_on_plate_area_area_exited"]
