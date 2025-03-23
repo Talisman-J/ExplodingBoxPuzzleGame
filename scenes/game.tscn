@@ -106,6 +106,7 @@ script = ExtResource("2_gee14")
 
 [node name="AreaUp" type="Area2D" parent="Camera2D"]
 position = Vector2(0, -112)
+collision_layer = 0
 
 [node name="AreaUpColl" type="CollisionShape2D" parent="Camera2D/AreaUp"]
 scale = Vector2(0.99, 1.01)
@@ -114,6 +115,7 @@ debug_color = Color(0, 0.6, 0.701961, 0)
 
 [node name="AreaDown" type="Area2D" parent="Camera2D"]
 position = Vector2(0, 112)
+collision_layer = 0
 
 [node name="AreaDownColl" type="CollisionShape2D" parent="Camera2D/AreaDown"]
 scale = Vector2(0.99, 1.01)
@@ -122,6 +124,7 @@ debug_color = Color(0, 0.6, 0.701961, 0)
 
 [node name="AreaRight" type="Area2D" parent="Camera2D"]
 position = Vector2(224, -16)
+collision_layer = 0
 
 [node name="AreaRightColl" type="CollisionShape2D" parent="Camera2D/AreaRight"]
 position = Vector2(0, 16)
@@ -130,6 +133,7 @@ debug_color = Color(0, 0.6, 0.701961, 0)
 
 [node name="AreaLeft" type="Area2D" parent="Camera2D"]
 position = Vector2(-224, -16)
+collision_layer = 0
 
 [node name="AreaLeftColl" type="CollisionShape2D" parent="Camera2D/AreaLeft"]
 position = Vector2(0.5, 18.5)
