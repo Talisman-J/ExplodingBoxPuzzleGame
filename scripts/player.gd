@@ -377,7 +377,7 @@ func runCustomSolution():
 	var customSolution3 = [["MoveUp", 0],["MoveUp", 1],["MoveUp", 2],["MoveDown", 3],["MoveDown", 4],["MoveUp", 5],["MoveUp", 6],["MoveUp", 7],["MoveLeft", 8],["MoveLeft", 9],["MoveDown", 10],["MoveDown", 11],["MoveDown", 12],["MoveLeft", 13],["MoveRight", 14],["MoveUp", 15],["MoveDown", 16],["MoveLeft", 17],["MoveLeft", 18],["MoveLeft", 19],["MoveLeft", 20],["MoveDown", 21],["MoveDown", 22],["MoveDown", 23],["MoveRight", 24],["MoveRight", 25],["MoveRight", 26],["MoveRight", 27],["MoveUp", 28],["MoveUp", 29],["MoveDown", 30],["MoveDown", 31],["MoveLeft", 32],["MoveLeft", 33],["MoveLeft", 34],["MoveLeft", 35],["MoveUp", 36],["MoveUp", 37],["MoveUp", 38],["MoveLeft", 39],["MoveUp", 40],["MoveLeft", 41],["MoveLeft", 42],["MoveDown", 43],["MoveRight", 44],["MoveRight", 45],["MoveUp", 46],["MoveLeft", 47],["MoveUp", 48],["MoveUp", 49],["MoveUp", 50],["MoveRight", 51],["MoveRight", 52],["MoveDown", 53],["MoveDown", 54],["MoveDown", 55],["MoveLeft", 56],["MoveDown", 57],["MoveRight", 58],["MoveRight", 59],["MoveRight", 60],["MoveLeft", 61],["MoveLeft", 62],["MoveLeft", 63],["MoveLeft", 64],["MoveRight", 65],["MoveRight", 66],["MoveDown", 67],["MoveDown", 68],["MoveDown", 69],["MoveRight", 70],["MoveRight", 71],["MoveRight", 72],["MoveRight", 73],["MoveUp", 74],["MoveUp", 75],["MoveUp", 76],["MoveLeft", 77],["MoveLeft", 78],["MoveLeft", 79],["MoveLeft", 80],["MoveLeft", 81],["MoveLeft", 82],["MoveLeft", 83],["MoveLeft", 84],["MoveUp", 85],["MoveUp", 86],["MoveUp", 87],["MoveRight", 88],["MoveUp", 89],["MoveRight", 90],["MoveDown", 91],["MoveDown", 92],["MoveDown", 93],["MoveLeft", 94],["MoveDown", 95],["MoveRight", 96],["MoveRight", 97],["MoveRight", 98],["MoveRight", 99],["MoveRight", 100],["MoveRight", 101],["MoveRight", 102],["MoveRight", 103],["MoveLeft", 104],["MoveDown", 105],["MoveRight", 106],["MoveRight", 107],["MoveRight", 108],["MoveRight", 109],["MoveRight", 110],["MoveRight", 111],["MoveRight", 112],["MoveRight", 113],["MoveRight", 114],["MoveUp", 115],["MoveRight", 116],["MoveRight", 117],["MoveUp", 118],["MoveUp", 119],["MoveUp", 120],["MoveLeft", 121],["MoveLeft", 122],["MoveDown", 123],["MoveDown", 124],["MoveDown", 125],["MoveDown", 126],["MoveUp", 127],["MoveLeft", 128],["MoveLeft", 129],["MoveLeft", 130],["MoveLeft", 131],["MoveDown", 132],["MoveDown", 133],["MoveDown", 134],["MoveRight", 135],["MoveRight", 136],["MoveRight", 137],["MoveRight", 138],["MoveUp", 139],["MoveUp", 140],["MoveDown", 141],["MoveDown", 142],["MoveLeft", 143],["MoveLeft", 144],["MoveLeft", 145],["MoveLeft", 146],["MoveUp", 147],["MoveUp", 148],["MoveUp", 149],["MoveRight", 150],["MoveRight", 151],["MoveRight", 152],["MoveRight", 153],["MoveRight", 154],["MoveRight", 155],["MoveRight", 156],["MoveRight", 157],["MoveRight", 158],["MoveDown", 159],["MoveRight", 160],["MoveUp", 161],["MoveUp", 162],["MoveUp", 163],["MoveUp", 164]]
 	
 	
-	for solut in customSolution3: #CHANGE THIS TO RUN DIFF SOLUTIONS
+	for solut in customSolution1: #CHANGE THIS TO RUN DIFF SOLUTIONS
 		await get_tree().create_timer(.05).timeout
 		if solut.get(0) == "MoveRight":
 			input_vector = Vector2(1, 0)
@@ -416,6 +416,7 @@ func runCustomSolution():
 			moveCountChange.emit(MOVECOUNT)
 	
 func resetLevel():
+	get_tree().call_group("Level1", "resetLevel")
 	position = resetPos
 	currPos = resetPos
 	moves = []

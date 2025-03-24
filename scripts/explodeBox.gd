@@ -190,10 +190,10 @@ func explode():
 		finishedVisualExplosion.emit()
 		
 
-func _unhandled_input(event):
-	if event.is_action_pressed("ResetLevel"):
-		# "r"
-		resetLevel()
+#func _unhandled_input(event):
+	#if event.is_action_pressed("ResetLevel"):
+		## "r"
+		#resetLevel()
 		
 func resetLevel():
 	position = resetPos

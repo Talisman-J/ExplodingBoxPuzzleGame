@@ -373,12 +373,13 @@ func push_other(direction) -> bool:
 	gettingPushed = false
 	return didMove
 	
-func _unhandled_input(event):
-	if event.is_action_pressed("ResetLevel"):
-		# "r"
-		resetLevel()
+#func _unhandled_input(event):
+	#if event.is_action_pressed("ResetLevel"):
+		## "r"
+		#resetLevel()
 		
 func resetLevel():
+	print("BOX RESET LEVEL IS CALLED")
 	position = resetPos
 	currPos = resetPos
 	moves = []
