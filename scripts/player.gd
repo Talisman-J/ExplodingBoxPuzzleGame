@@ -2,7 +2,9 @@ extends CharacterBody2D
 
 @onready var animation_tree = get_node("AnimationTree")
 
-var currPos = Vector2(0, 0)
+var currPos = position
+var resetPos: Vector2 = position
+
 var input_vector = Vector2.DOWN
 var moving : bool = false # To lock movement until reaching tile
 var moves: Array = [] # Holds the move name and Movecount
@@ -19,6 +21,7 @@ var exploded = false
 var undoing = false
 
 var pauseTime = false
+
 
 
 
@@ -100,12 +103,13 @@ func _unhandled_input(event):
 	elif event.is_action_pressed("RunCustomSolution"):
 		# "u"
 		runCustomSolution()
+	elif event.is_action_pressed("ResetLevel"):
+		# "r"
+		resetLevel()
 		
 	update_animation_parameters()
-
 	await get_tree().create_timer(.05).timeout
 	pauseTime = false
-	
 	
 	
 var inputs = {
@@ -411,4 +415,10 @@ func runCustomSolution():
 			MOVECOUNT += 1
 			moveCountChange.emit(MOVECOUNT)
 	
-	
+func resetLevel():
+	position = resetPos
+	currPos = resetPos
+	moves = []
+	moveCountChange.emit(MOVECOUNT)
+	MOVECOUNT = 0
+	dead = false

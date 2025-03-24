@@ -4,9 +4,10 @@ extends CharacterBody2D
 
 #var currPos = Vector2(0, 0)
 var currPos = position
+var resetPos = position
 var exploded = false
 var movedOn : int = -1 #Holds the position and the MOVECOUNT the box was moved on. 
-var initPos = position
+
 
 
 var MOVECOUNT : int = 0
@@ -47,3 +48,21 @@ func explode(_dir):
 		$CollisionShape2D.disabled = true
 		movedOn = MOVECOUNT
 		print("Wall exploded!")
+
+
+
+func _unhandled_input(event):
+	if event.is_action_pressed("ResetLevel"):
+		# "r"
+		resetLevel()
+		
+func resetLevel():
+	position = resetPos
+	currPos = resetPos
+	MOVECOUNT = 0
+	
+	self.visible = true
+	exploded = false
+	$CollisionShape2D.disabled = false
+	
+	movedOn = -1

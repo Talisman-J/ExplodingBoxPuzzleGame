@@ -1,8 +1,9 @@
 class_name ExplodeBox
 extends CharacterBody2D
 
-#var currPos = Vector2(0, 0)
+
 var currPos = position
+var resetPos = position
 var input_vector = Vector2.ZERO
 var moving = false # To lock movement until reaching tile
 var didMove = false
@@ -110,6 +111,7 @@ func check_undo():
 #HOW TO CHANGE THIS: Right click on the exploding box scene, turn on editable-children. 
 @export var countdown : int = 5
 @onready var tempCountdown = countdown
+@onready var resetCountdown = countdown
 var firstMove = true
 func updateExplosionTimer(num):
 	# Timer variable decrements for each increment in MOVECOUNT. Increments for each decrement in MOVECOUNT. 
@@ -187,36 +189,30 @@ func explode():
 		#print("VISIBLE IS FALSEEEEEEEEEEE")
 		finishedVisualExplosion.emit()
 		
-		#Explode when undone while still visible makes the box invisible. 
+
+func _unhandled_input(event):
+	if event.is_action_pressed("ResetLevel"):
+		# "r"
+		resetLevel()
 		
-		#Explosion is not visible when undoing. 
-		
-		
-		
-		
-		
-		
-	#Likely places to error: In the case that 2 objects are in 1 raycast
-	#Intended behaviour: Push back one first, then closest second. 
-	#Object exploded should be pushed back 2, whether they are on first or second tile exploded. This means different distance can be reached with corpse.
+func resetLevel():
+	position = resetPos
+	currPos = resetPos
+	moves = []
+	MOVECOUNT = 0
 	
 	
-	#Shoot out raycast in 4 directions 32 px. Detect collisions with non walls. Break breakable walls. Kill player. Push playercorpse and boxes. 
+	countdown = resetCountdown
+	tempCountdown = countdown
 	
-	#set_cell
+	hasMoved = false
+	exploded = false
 	
-#	Kill player
-#	Check if corpse can move.
-#	If can:
-		#Move corpse away from explosion one.
-		#Check if it can move again:
-			#If so move back again
-			#Save position of corpse in undo function. Only increment moves by one.
-		#If not:
-			#Save position of corpse in undo function. Only increment moves by one. 
+	await get_tree().create_timer(.01).timeout
 	
-	#This will require an exploding state for the box and the player. Uses raycast similar to just normal checks. If player, pushes. If not stops. If box, pushes. If not stops. 
-	#Have edge case for box hitting player into wall breaking wall killing player. Doesn't kill normally, just pushes. 
-	#When enemies show up many more edge cases. Player hit by enemy dies. 
-#	
+	$Fire.visible = false
+	self.visible = true
+	$CollisionShape2D.disabled = false
 	
+	var textDisplay = $Label
+	textDisplay.text = str(countdown)

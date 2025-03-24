@@ -3,6 +3,7 @@ extends CharacterBody2D
 
 #var currPos = Vector2(0, 0)
 var currPos = position
+var resetPos = position
 var input_vector = Vector2.ZERO
 var moving = false # To lock movement until reaching tile
 var didMove = false
@@ -108,10 +109,7 @@ func moveUp():
 		return true
 	else:
 		return false
-		#moves.pop_back() #Gets rid of the movement appending and replaces it with inaction
-		#moves.append(["Inaction", MOVECOUNT])
-	##update_animation_parameters()
-	#moving = false
+		
 	
 func moveDown():
 	moving = true
@@ -123,10 +121,7 @@ func moveDown():
 		return true
 	else:
 		return false
-		#moves.pop_back() #Gets rid of the movement appending and replaces it with inaction
-		#moves.append(["Inaction", MOVECOUNT])
-	##update_animation_parameters()
-	#moving = false
+	
 	
 func moveLeft():
 	moving = true
@@ -138,10 +133,7 @@ func moveLeft():
 		return true
 	else:
 		return false
-		#moves.pop_back() #Gets rid of the movement appending and replaces it with inaction
-		#moves.append(["Inaction", MOVECOUNT])
-	#update_animation_parameters()
-	#moving = false
+
 	
 func moveRight():
 	moving = true
@@ -153,10 +145,7 @@ func moveRight():
 		return true
 	else:
 		return false
-		#moves.pop_back() #Gets rid of the movement appending and replaces it with inaction
-		#moves.append(["Inaction", MOVECOUNT])
-	##update_animation_parameters()
-	#moving = false
+	
 
 func moveAuto(dir):
 	if(dir == "up"):
@@ -170,38 +159,11 @@ func moveAuto(dir):
 
 
 
-#func attempt_move(direction):
-	#if didMove == true:
-		#didMove = false # shitty code
-		#
-	#var target_pos = currPos + input_vector * TILE_SIZE
-	#if can_move_to(direction):
-		#currPos = target_pos
-		#moving = true # Lock until move completes
-		#didMove = true
-		#moves.append([position, MOVECOUNT])
-		#worked = true
-		#if gettingPushed == true:
-			#print("BOX IS GETTING PUSHED BY EXPLOSION")
-			#moves.pop_back()
-	#else:
-		#worked = false
-	#position = currPos
-	#moving = false 
-	
-
-
-
-
-
-
 var inputs = {
 	"right": Vector2.RIGHT,
 	"left": Vector2.LEFT,
 	"up": Vector2.UP,
 	"down": Vector2.DOWN}
-	
-	
 	
 	
 func can_move_to(checkPos) -> bool:
@@ -410,3 +372,14 @@ func push_other(direction) -> bool:
 		moves.append(["PushDown", MOVECOUNT - 1])
 	gettingPushed = false
 	return didMove
+	
+func _unhandled_input(event):
+	if event.is_action_pressed("ResetLevel"):
+		# "r"
+		resetLevel()
+		
+func resetLevel():
+	position = resetPos
+	currPos = resetPos
+	moves = []
+	MOVECOUNT = 0
