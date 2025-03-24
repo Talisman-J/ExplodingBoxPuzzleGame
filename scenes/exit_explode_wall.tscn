@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://qnsmk1pxeatd"]
+
+[ext_resource type="PackedScene" uid="uid://cmci153vr4utt" path="res://scenes/explode_wall.tscn" id="1_v7yts"]
+[ext_resource type="Script" uid="uid://dy55hn5lm0ssn" path="res://scripts/exit_explode_wall.gd" id="2_m26qs"]
+
+[node name="ExitExplodeWall" instance=ExtResource("1_v7yts")]
+
+[node name="ExplodableWall" parent="." index="0"]
+script = ExtResource("2_m26qs")
