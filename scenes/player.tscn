@@ -266,8 +266,8 @@ target_position = Vector2(0, -16)
 collision_mask = 15
 collide_with_areas = true
 
-[node name="CamArea" type="Area2D" parent="."]
+[node name="PlayerArea" type="Area2D" parent="."]
 
-[node name="CamCollider" type="CollisionShape2D" parent="CamArea"]
+[node name="CamCollider" type="CollisionShape2D" parent="PlayerArea"]
 shape = SubResource("RectangleShape2D_g2els")
 debug_color = Color(0.797039, 0.249487, 0.84479, 0.42)
