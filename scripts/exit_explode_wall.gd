@@ -51,3 +51,8 @@ func explode(_dir):
 		$CollisionShape2D.disabled = true
 		movedOn = MOVECOUNT
 		print("Wall exploded!")
+
+
+func resetLevel():
+	#Should hopefully not reset and also should hopefully be permanent if exploded. 
+	movedOn = -1

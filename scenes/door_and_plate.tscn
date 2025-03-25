@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://be5q8a6638q5j"]
+[gd_scene load_steps=6 format=3 uid="uid://be5q8a6638q5j"]
 
 [ext_resource type="Script" uid="uid://q7nubblr50yd" path="res://scripts/door_and_plate.gd" id="1_7mywq"]
 [ext_resource type="Texture2D" uid="uid://cxn0k05mgd62y" path="res://assets/SciAssets/SciSpriteSheet.png" id="2_cadng"]
+[ext_resource type="Texture2D" uid="uid://dses5rw1hjnuc" path="res://assets/SciAssets/SciRuneSheet.png" id="2_t2oi6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vtaks"]
 size = Vector2(10, 10)
@@ -29,13 +30,13 @@ visibility_layer = 2
 shape = SubResource("RectangleShape2D_vtaks")
 
 [node name="PlateSprite" type="Sprite2D" parent="PlateArea"]
-modulate = Color(1, 0.768627, 1, 1)
 show_behind_parent = true
 light_mask = 16
 visibility_layer = 16
-texture = ExtResource("2_cadng")
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_t2oi6")
 region_enabled = true
-region_rect = Rect2(32, 0, 16, 16)
+region_rect = Rect2(96, 96, 32, 32)
 
 [node name="DoorArea" type="Area2D" parent="."]
 position = Vector2(-16, -16)
@@ -48,11 +49,20 @@ light_mask = 2
 visibility_layer = 2
 shape = SubResource("RectangleShape2D_kvpfn")
 
-[node name="DoorSprite" type="Sprite2D" parent="DoorArea"]
+[node name="ClosedDoorSprite" type="Sprite2D" parent="DoorArea"]
 modulate = Color(1, 0, 1, 1)
 show_behind_parent = true
 light_mask = 2
 visibility_layer = 2
+texture = ExtResource("2_cadng")
+region_enabled = true
+region_rect = Rect2(80, 32, 16, 16)
+
+[node name="OpenDoorSprite" type="Sprite2D" parent="DoorArea"]
+self_modulate = Color(0.984314, 0.686275, 0.941176, 0.521569)
+light_mask = 4
+visibility_layer = 4
+z_index = -1
 texture = ExtResource("2_cadng")
 region_enabled = true
 region_rect = Rect2(80, 32, 16, 16)
