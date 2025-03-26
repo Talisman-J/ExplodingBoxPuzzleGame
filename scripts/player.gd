@@ -55,47 +55,67 @@ func _unhandled_input(event):
 	
 	pauseTime = true
 	
-	
 	if event.is_action_pressed("ui_right"):
-		input_vector = Vector2(1, 0)
-		#THIS ORDER IS IMPORTANT.
-		#In the case of an Inaction move being recorded, it pops the movement from the list and replaces it. This always has to be appened before movement. 
-		moves.append(["MoveRight", MOVECOUNT])
-		moveRight()
-		MOVECOUNT += 1
-		moveCountChange.emit(MOVECOUNT)
+		if dead:
+			moves.append(["Inaction", MOVECOUNT])
+			MOVECOUNT += 1
+			moveCountChange.emit(MOVECOUNT)
+		else:
+			input_vector = Vector2(1, 0)
+			#THIS ORDER IS IMPORTANT.
+			#In the case of an Inaction move being recorded, it pops the movement from the list and replaces it. This always has to be appened before movement. 
+			moves.append(["MoveRight", MOVECOUNT])
+			moveRight()
+			MOVECOUNT += 1
+			moveCountChange.emit(MOVECOUNT)
 		
 	elif event.is_action_pressed("ui_left"):
-		input_vector = Vector2(-1, 0)
-		#THIS ORDER IS IMPORTANT.
-		#In the case of an Inaction move being recorded, it pops the movement from the list and replaces it. This always has to be appened before movement. 
-		moves.append(["MoveLeft", MOVECOUNT])
-		moveLeft()
-		MOVECOUNT += 1
-		moveCountChange.emit(MOVECOUNT)
+		if dead:
+			moves.append(["Inaction", MOVECOUNT])
+			MOVECOUNT += 1
+			moveCountChange.emit(MOVECOUNT)
+		else:
+			input_vector = Vector2(-1, 0)
+			#THIS ORDER IS IMPORTANT.
+			#In the case of an Inaction move being recorded, it pops the movement from the list and replaces it. This always has to be appened before movement. 
+			moves.append(["MoveLeft", MOVECOUNT])
+			moveLeft()
+			MOVECOUNT += 1
+			moveCountChange.emit(MOVECOUNT)
 		
 	elif event.is_action_pressed("ui_up"):
-		input_vector = Vector2(0, -1)
-		#THIS ORDER IS IMPORTANT.
-		#In the case of an Inaction move being recorded, it pops the movement from the list and replaces it. This always has to be appened before movement. 
-		moves.append(["MoveUp", MOVECOUNT])
-		moveUp()
-		MOVECOUNT += 1
-		moveCountChange.emit(MOVECOUNT)
+		if dead:
+			moves.append(["Inaction", MOVECOUNT])
+			MOVECOUNT += 1
+			moveCountChange.emit(MOVECOUNT)
+		else:
+			input_vector = Vector2(0, -1)
+			#THIS ORDER IS IMPORTANT.
+			#In the case of an Inaction move being recorded, it pops the movement from the list and replaces it. This always has to be appened before movement. 
+			moves.append(["MoveUp", MOVECOUNT])
+			moveUp()
+			MOVECOUNT += 1
+			moveCountChange.emit(MOVECOUNT)
 		
 	elif event.is_action_pressed("ui_down"):
-		input_vector = Vector2(0, 1)
-		#THIS ORDER IS IMPORTANT.
-		#In the case of an Inaction move being recorded, it pops the movement from the list and replaces it. This always has to be appened before movement. 
-		moves.append(["MoveDown", MOVECOUNT])
-		moveDown()
-		MOVECOUNT += 1
-		moveCountChange.emit(MOVECOUNT)
+		if dead:
+			moves.append(["Inaction", MOVECOUNT])
+			MOVECOUNT += 1
+			moveCountChange.emit(MOVECOUNT)
+		else:
+			input_vector = Vector2(0, 1)
+			#THIS ORDER IS IMPORTANT.
+			#In the case of an Inaction move being recorded, it pops the movement from the list and replaces it. This always has to be appened before movement. 
+			moves.append(["MoveDown", MOVECOUNT])
+			moveDown()
+			MOVECOUNT += 1
+			moveCountChange.emit(MOVECOUNT)
 		
 	elif event.is_action_pressed("undoMove"):
 		#print("Tried to undo")
 		if MOVECOUNT > 0:
 			undo()
+			
 			
 	elif event.is_action_pressed("PrintSolutionMap"):
 		# "p"
@@ -243,6 +263,7 @@ func undo():
 						for i in range(action[2]): # Gets the distance player travelled while exploding. 
 							moveDown()
 						exploded = false
+						dead = false #When exploded twice while dead this breaks...
 						
 					if action[3] == "down":
 						input_vector = Vector2(0, 1)
@@ -250,6 +271,7 @@ func undo():
 						for i in range(action[2]): # Gets the distance player travelled while exploding. 
 							moveUp()
 						exploded = false
+						dead = false #When exploded twice while dead this breaks...
 						
 					if action[3] == "right":
 						input_vector = Vector2(1, 0)
@@ -257,6 +279,7 @@ func undo():
 						for i in range(action[2]): # Gets the distance player travelled while exploding. 
 							moveLeft()
 						exploded = false
+						dead = false #When exploded twice while dead this breaks...
 						
 					if action[3] == "left":
 						input_vector = Vector2(-1, 0)
@@ -264,6 +287,7 @@ func undo():
 						for i in range(action[2]): # Gets the distance player travelled while exploding. 
 							moveRight()
 						exploded = false
+						dead = false #When exploded twice while dead this breaks...
 		
 				#MOVEMENT UNDO
 				if action[0] == "MoveUp":
