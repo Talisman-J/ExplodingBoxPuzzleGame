@@ -251,12 +251,12 @@ func moveAuto(dir):
 
 func update_animation_parameters():
 	# Update blend position (for direction)
-	animation_tree["parameters/Idle/blend_position"] = input_vector
-	animation_tree["parameters/Walk/blend_position"] = input_vector
+	animation_tree["parameters/GoatIdle/blend_position"] = input_vector
+	#animation_tree["parameters/Walk/blend_position"] = input_vector
 	
 	# Switch between idle and walk based on whether input exists
 	#if input_vector == Vector2.ZERO:
-	animation_tree["parameters/playback"].travel("Idle")
+	animation_tree["parameters/playback"].travel("GoatIdle")
 	#else:
 		#animation_tree["parameters/playback"].travel("Walk")
 	
