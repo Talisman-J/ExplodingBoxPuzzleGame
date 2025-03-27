@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 @onready var animation_tree = get_node("AnimationTree")
 
-var currPos = position
+@onready var currPos = position
 var resetPos: Vector2 = position
 
 var input_vector = Vector2.DOWN
