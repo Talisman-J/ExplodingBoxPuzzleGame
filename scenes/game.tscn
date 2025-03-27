@@ -417,10 +417,10 @@ position = Vector2(352, 32)
 position = Vector2(272, 48)
 
 [node name="explodingBox" parent="AllLevels/Level3/Level3ExplodeBox/ExplodeBox" index="0"]
-countdown = 5
+countdown = 7
 
 [node name="ExplodeBox2" parent="AllLevels/Level3/Level3ExplodeBox" instance=ExtResource("4_p57ef")]
-position = Vector2(272, 80)
+position = Vector2(320, 32)
 
 [node name="explodingBox" parent="AllLevels/Level3/Level3ExplodeBox/ExplodeBox2" index="0"]
 countdown = 2

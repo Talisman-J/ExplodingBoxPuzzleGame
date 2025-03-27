@@ -13,7 +13,7 @@ var exploding = false
 var gettingPushed = false
 var dead : bool = false
 var didMove = false
-var turnsSinceDeath
+var turnsSinceDeath = 0
 
 var canUndo = 0
 
@@ -60,6 +60,7 @@ func _unhandled_input(event):
 			moves.append(["Inaction", MOVECOUNT])
 			MOVECOUNT += 1
 			moveCountChange.emit(MOVECOUNT)
+			turnsSinceDeath += 1
 		else:
 			input_vector = Vector2(1, 0)
 			#THIS ORDER IS IMPORTANT.
@@ -74,6 +75,7 @@ func _unhandled_input(event):
 			moves.append(["Inaction", MOVECOUNT])
 			MOVECOUNT += 1
 			moveCountChange.emit(MOVECOUNT)
+			turnsSinceDeath += 1
 		else:
 			input_vector = Vector2(-1, 0)
 			#THIS ORDER IS IMPORTANT.
@@ -88,6 +90,7 @@ func _unhandled_input(event):
 			moves.append(["Inaction", MOVECOUNT])
 			MOVECOUNT += 1
 			moveCountChange.emit(MOVECOUNT)
+			turnsSinceDeath += 1
 		else:
 			input_vector = Vector2(0, -1)
 			#THIS ORDER IS IMPORTANT.
@@ -102,6 +105,7 @@ func _unhandled_input(event):
 			moves.append(["Inaction", MOVECOUNT])
 			MOVECOUNT += 1
 			moveCountChange.emit(MOVECOUNT)
+			turnsSinceDeath += 1
 		else:
 			input_vector = Vector2(0, 1)
 			#THIS ORDER IS IMPORTANT.
@@ -247,6 +251,9 @@ func undo():
 	MOVECOUNT -= 1
 	moveCountChange.emit(MOVECOUNT)
 	#print(MOVECOUNT)
+	if turnsSinceDeath > 0:
+		turnsSinceDeath -= 1
+	print(turnsSinceDeath)
 	var actions = getListActions(MOVECOUNT)
 	if actions.is_empty():
 		return
@@ -265,7 +272,8 @@ func undo():
 						for i in range(action[2]): # Gets the distance player travelled while exploding. 
 							moveDown()
 						exploded = false
-						dead = false #When exploded twice while dead this breaks...
+						if turnsSinceDeath == 0:
+							dead = false #When exploded twice while dead this breaks...
 						
 					if action[3] == "down":
 						input_vector = Vector2(0, 1)
@@ -273,7 +281,8 @@ func undo():
 						for i in range(action[2]): # Gets the distance player travelled while exploding. 
 							moveUp()
 						exploded = false
-						dead = false #When exploded twice while dead this breaks...
+						if turnsSinceDeath == 0:
+							dead = false #When exploded twice while dead this breaks...
 						
 					if action[3] == "right":
 						input_vector = Vector2(1, 0)
@@ -281,7 +290,8 @@ func undo():
 						for i in range(action[2]): # Gets the distance player travelled while exploding. 
 							moveLeft()
 						exploded = false
-						dead = false #When exploded twice while dead this breaks...
+						if turnsSinceDeath == 0:
+							dead = false #When exploded twice while dead this breaks...
 						
 					if action[3] == "left":
 						input_vector = Vector2(-1, 0)
@@ -289,7 +299,8 @@ func undo():
 						for i in range(action[2]): # Gets the distance player travelled while exploding. 
 							moveRight()
 						exploded = false
-						dead = false #When exploded twice while dead this breaks...
+						if turnsSinceDeath == 0:
+							dead = false #When exploded twice while dead this breaks...
 		
 				#MOVEMENT UNDO
 				if action[0] == "MoveUp":
