@@ -20,7 +20,7 @@ script = ExtResource("1_7mywq")
 [node name="PlateArea" type="Area2D" parent="."]
 show_behind_parent = true
 collision_layer = 2147483648
-collision_mask = 15
+collision_mask = 2147483663
 
 [node name="Plate" type="CollisionShape2D" parent="PlateArea"]
 show_behind_parent = true

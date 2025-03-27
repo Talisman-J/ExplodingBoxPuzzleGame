@@ -127,6 +127,7 @@ region_enabled = true
 region_rect = Rect2(32, 32, 32, 16)
 
 [node name="ExplodeBoxArea" type="Area2D" parent="explodingBox"]
+collision_layer = 2147483648
 collision_mask = 2147483663
 
 [node name="ExplodeBoxAreaColl" type="CollisionShape2D" parent="explodingBox/ExplodeBoxArea"]
