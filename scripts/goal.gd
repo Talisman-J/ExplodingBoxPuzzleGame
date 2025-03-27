@@ -9,7 +9,7 @@ func _init() -> void:
 	
 func _ready() -> void:
 	finalTotalCount = totalCount
-	$"../Camera2D/RichTextLabel".text = str(totalCount) + "/" + str(finalTotalCount)
+	$"../../../../Camera2D/RichTextLabel".text = str(totalCount) + "/" + str(finalTotalCount)
 
 
 
@@ -18,4 +18,4 @@ func _on_goal_area_area_entered(area: Area2D) -> void:
 		totalCount -= 1
 		$GoalArea/GoalColl.set_deferred("disabled", true)
 		$GoalArea.visible = false
-		$"../Camera2D/RichTextLabel".text = str(totalCount) + "/" + str(finalTotalCount)
+		$"../../../../Camera2D/RichTextLabel".text = str(totalCount) + "/" + str(finalTotalCount)

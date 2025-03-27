@@ -232,7 +232,6 @@ horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="Player" parent="." instance=ExtResource("2_lnu2h")]
-position = Vector2(224, 32)
 
 [node name="TileMapLayerWalls" type="TileMapLayer" parent="."]
 show_behind_parent = true
@@ -377,6 +376,11 @@ position = Vector2(64, -80)
 [node name="ExitExplodeWall2" parent="AllLevels/Level1/Level1ExitWallExplode" instance=ExtResource("10_kvpfn")]
 position = Vector2(-48, -80)
 
+[node name="Level1Goal" type="Node" parent="AllLevels/Level1"]
+
+[node name="Goal" parent="AllLevels/Level1/Level1Goal" instance=ExtResource("12_dinhu")]
+position = Vector2(176, 80)
+
 [node name="Level2" type="Node" parent="AllLevels"]
 
 [node name="Level2DoorPlate" type="Node" parent="AllLevels/Level2"]
@@ -395,6 +399,11 @@ position = Vector2(-96, -48)
 [node name="Level2WallExplode" type="Node" parent="AllLevels/Level2"]
 
 [node name="Level2ExitWallExplode" type="Node" parent="AllLevels/Level2"]
+
+[node name="Level2Goal" type="Node" parent="AllLevels/Level2"]
+
+[node name="Goal2" parent="AllLevels/Level2/Level2Goal" instance=ExtResource("12_dinhu")]
+position = Vector2(64, -128)
 
 [node name="Level3" type="Node" parent="AllLevels"]
 
@@ -512,39 +521,6 @@ countdown = 2
 [node name="Level3WallExplode" type="Node" parent="AllLevels/Level10"]
 
 [node name="Level3ExitWallExplode" type="Node" parent="AllLevels/Level10"]
-
-[node name="Goal" parent="." instance=ExtResource("12_dinhu")]
-position = Vector2(176, 80)
-
-[node name="Goal2" parent="." instance=ExtResource("12_dinhu")]
-position = Vector2(304, -16)
-
-[node name="Goal3" parent="." instance=ExtResource("12_dinhu")]
-position = Vector2(320, -16)
-
-[node name="Goal4" parent="." instance=ExtResource("12_dinhu")]
-position = Vector2(304, 0)
-
-[node name="Goal5" parent="." instance=ExtResource("12_dinhu")]
-position = Vector2(320, 0)
-
-[node name="Goal6" parent="." instance=ExtResource("12_dinhu")]
-position = Vector2(336, -16)
-
-[node name="Goal7" parent="." instance=ExtResource("12_dinhu")]
-position = Vector2(336, 0)
-
-[node name="Goal8" parent="." instance=ExtResource("12_dinhu")]
-position = Vector2(352, -16)
-
-[node name="Goal9" parent="." instance=ExtResource("12_dinhu")]
-position = Vector2(352, 0)
-
-[node name="Goal10" parent="." instance=ExtResource("12_dinhu")]
-position = Vector2(368, -16)
-
-[node name="Goal11" parent="." instance=ExtResource("12_dinhu")]
-position = Vector2(368, 0)
 
 [node name="DoorAndPlate" parent="." instance=ExtResource("10_vtaks")]
 position = Vector2(464, 80)
