@@ -11,6 +11,7 @@ var hasMoved = false
 var exploded = false
 var moves: Array = [] #Holds the position and the MOVECOUNT the box was moved on. 
 var initPos = position
+var exploding = false
 
 
 var MOVECOUNT : int = 0
@@ -154,6 +155,7 @@ signal finishedVisualExplosion() #finishedVis
 func explode():
 	#Change the name of this method to something else so that exploding boxes can blow up each other. 
 	if !exploded:
+		exploding = true
 		$Fire.visible = true
 		#TODO: In the future for visual effect, hold this fire and an exploding barrel for a frame until player advances next turn for visual pleasantness.
 		var temporaryMoveCount = MOVECOUNT
@@ -162,38 +164,78 @@ func explode():
 		#self.visible = false
 		exploded = true
 		$CollisionShape2D.disabled = true
-		var expRad = $ExplosionRadius
-		var angleDir
-		for input in inputs:
-			expRad.clear_exceptions()
-			expRad.force_raycast_update()
-			angleDir = inputs[input].angle()
-			expRad.rotation = angleDir + PI/2
-			expRad.force_raycast_update()
-			
-			var hitObjects = []
-			var directions = []
-			for i in range(2): # limit attempts to prevent infinite loop
-				expRad.force_raycast_update()
-				if expRad.is_colliding():
-					var obj = expRad.get_collider()
-					hitObjects.append(obj)
-					
-					expRad.add_exception(obj) # avoid hitting it again
-				else:
-					break
-			for object in hitObjects:
-				object.explode(input) #Make sure this is implemented in every object. 
-		await player.moveCountChange
+		
+		var upObjects = $Fire/FireUpArea.get_overlapping_areas()
+		var downObjects = $Fire/FireDownArea.get_overlapping_areas()
+		var leftObjects = $Fire/FireLeftArea.get_overlapping_areas()
+		var rightObjects = $Fire/FireRightArea.get_overlapping_areas()
+
+		
+		for i in range(0, 2, 1):
+			print("This printed")
+			if upObjects.size() > i:
+				upObjects[i].get_parent().explode("up")
+			if downObjects.size() > i:
+				downObjects[i].get_parent().explode("down")
+			if rightObjects.size() > i:
+				rightObjects[i].get_parent().explode("right")
+			if leftObjects.size() > i:
+				leftObjects[i].get_parent().explode("left")
+		await player.moveCountChange #Errors when undoing. 
 		self.visible = false
-		#print("VISIBLE IS FALSEEEEEEEEEEE")
-		finishedVisualExplosion.emit()
+		exploding = false
+		
+		
+		
+func _on_fire_up_area_area_entered(area: Area2D) -> void:
+	if exploding:
+		area.get_parent().explode("up")
+
+func _on_fire_down_area_area_entered(area: Area2D) -> void:
+	if exploding:
+		area.get_parent().explode("down")
+
+func _on_fire_right_area_area_entered(area: Area2D) -> void:
+	if exploding:
+		area.get_parent().explode("right")
+
+func _on_fire_left_area_area_entered(area: Area2D) -> void:
+	if exploding:
+		area.get_parent().explode("left")
+
+		
+		
+		
+		
+		
+		#var expRad = $ExplosionRadius
+		#var angleDir
+		#for input in inputs:
+			#expRad.clear_exceptions()
+			#expRad.force_raycast_update()
+			#angleDir = inputs[input].angle()
+			#expRad.rotation = angleDir + PI/2
+			#expRad.force_raycast_update()
+			#
+			#var hitObjects = []
+			#var directions = []
+			#for i in range(2): # limit attempts to prevent infinite loop
+				#expRad.force_raycast_update()
+				#if expRad.is_colliding():
+					#var obj = expRad.get_collider()
+					#hitObjects.append(obj)
+					#
+					#expRad.add_exception(obj) # avoid hitting it again
+				#else:
+					#break
+			#for object in hitObjects:
+				#object.explode(input) #Make sure this is implemented in every object. 
+		#await player.moveCountChange
+		#self.visible = false
+		##print("VISIBLE IS FALSEEEEEEEEEEE")
+		#finishedVisualExplosion.emit()
 		
 
-#func _unhandled_input(event):
-	#if event.is_action_pressed("ResetLevel"):
-		## "r"
-		#resetLevel()
 		
 func resetLevel():
 	position = resetPos

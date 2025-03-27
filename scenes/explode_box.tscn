@@ -1,10 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://2qbsfxti0leb"]
+[gd_scene load_steps=6 format=3 uid="uid://2qbsfxti0leb"]
 
 [ext_resource type="Script" uid="uid://b0kel6566h4ks" path="res://scripts/explodeBox.gd" id="1_d5wfv"]
 [ext_resource type="Texture2D" uid="uid://cxn0k05mgd62y" path="res://assets/SciAssets/SciSpriteSheet.png" id="2_h6g1i"]
 [ext_resource type="Texture2D" uid="uid://bssrpnorek8o1" path="res://assets/SciAssets/SciSplodeSheet.png" id="3_h6g1i"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lnu2h"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h6g1i"]
+size = Vector2(10, 21)
 
 [node name="ExplodeBox" type="Node2D"]
 
@@ -68,6 +71,51 @@ texture = ExtResource("3_h6g1i")
 region_enabled = true
 region_rect = Rect2(32, 32, 32, 16)
 
+[node name="FireSprite" type="Sprite2D" parent="explodingBox/Fire"]
+position = Vector2(-23, -1.5)
+texture = ExtResource("3_h6g1i")
+region_enabled = true
+region_rect = Rect2(32, 32, 32, 16)
+
+[node name="FireUpArea" type="Area2D" parent="explodingBox/Fire"]
+position = Vector2(0, -16)
+collision_layer = 0
+
+[node name="FireUpColl" type="CollisionShape2D" parent="explodingBox/Fire/FireUpArea"]
+position = Vector2(0, -5.5)
+shape = SubResource("RectangleShape2D_h6g1i")
+debug_color = Color(0.97251, 0.106286, 0.326916, 0.42)
+
+[node name="FireDownArea" type="Area2D" parent="explodingBox/Fire"]
+position = Vector2(0, 16)
+rotation = 3.14159
+collision_layer = 0
+
+[node name="FireDownColl" type="CollisionShape2D" parent="explodingBox/Fire/FireDownArea"]
+position = Vector2(0, -5.5)
+shape = SubResource("RectangleShape2D_h6g1i")
+debug_color = Color(0.97251, 0.106286, 0.326916, 0.42)
+
+[node name="FireRightArea" type="Area2D" parent="explodingBox/Fire"]
+position = Vector2(16, 0)
+rotation = 1.5708
+collision_layer = 0
+
+[node name="FireRightColl" type="CollisionShape2D" parent="explodingBox/Fire/FireRightArea"]
+position = Vector2(0, -5.5)
+shape = SubResource("RectangleShape2D_h6g1i")
+debug_color = Color(0.97251, 0.106286, 0.326916, 0.42)
+
+[node name="FireLeftArea" type="Area2D" parent="explodingBox/Fire"]
+position = Vector2(-16, 0)
+rotation = -1.5708
+collision_layer = 0
+
+[node name="FireLeftColl" type="CollisionShape2D" parent="explodingBox/Fire/FireLeftArea"]
+position = Vector2(0, -5.5)
+shape = SubResource("RectangleShape2D_h6g1i")
+debug_color = Color(0.97251, 0.106286, 0.326916, 0.42)
+
 [node name="FireSprite2" type="Sprite2D" parent="explodingBox/Fire"]
 position = Vector2(0, -23)
 rotation = 1.5708
@@ -75,8 +123,7 @@ texture = ExtResource("3_h6g1i")
 region_enabled = true
 region_rect = Rect2(32, 32, 32, 16)
 
-[node name="FireSprite" type="Sprite2D" parent="explodingBox/Fire"]
-position = Vector2(-23, -1.5)
-texture = ExtResource("3_h6g1i")
-region_enabled = true
-region_rect = Rect2(32, 32, 32, 16)
+[connection signal="area_entered" from="explodingBox/Fire/FireUpArea" to="explodingBox" method="_on_fire_up_area_area_entered"]
+[connection signal="area_entered" from="explodingBox/Fire/FireDownArea" to="explodingBox" method="_on_fire_down_area_area_entered"]
+[connection signal="area_entered" from="explodingBox/Fire/FireRightArea" to="explodingBox" method="_on_fire_right_area_area_entered"]
+[connection signal="area_entered" from="explodingBox/Fire/FireLeftArea" to="explodingBox" method="_on_fire_left_area_area_entered"]
