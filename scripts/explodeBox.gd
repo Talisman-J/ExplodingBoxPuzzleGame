@@ -51,9 +51,20 @@ func _on_moveCountChange(newMoveCount):
 		if hasMoved:
 			updateExplosionTimer(-1)
 
+func checkMovement():
+	print("The current box moves are: ", moves)
+	if hasMoved:
+		updateExplosionTimer(-1)
+		moves.get(moves.size() - 1)[1] = moves.get(moves.size() - 1)[1] - 1
+		print("The new box moves are: ", moves)
+		
+
 func push_box(direction) -> bool:
-	print("This is run")
+	print("hasMoved should be true here")
 	hasMoved = true
+	
+	
+	
 	if moving:
 		return didMove # Prevent new movement until done with current one
 	if didMove == true:
@@ -65,6 +76,7 @@ func push_box(direction) -> bool:
 		if moveRight():
 			moves.append(["MoveRight", MOVECOUNT])
 			didMove = true
+			print("MOVED TO THE RIGHT")
 	elif direction == "left":
 		input_vector = Vector2(-1, 0)
 		if moveLeft():
@@ -346,6 +358,7 @@ func push_other(direction) -> bool:
 @onready var resetCountdown = countdown
 @onready var textDisplay = $Label
 var firstMove = true
+
 func updateExplosionTimer(num):
 	# Timer variable decrements for each increment in MOVECOUNT. Increments for each decrement in MOVECOUNT. 
 	# When reaches 0, explode. Will replay exploding animation when undoing.

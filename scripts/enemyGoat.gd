@@ -68,8 +68,12 @@ func _on_moveCountChange(newMoveCount):
 			undo()
 	else:
 		# Update for undo to be able to keep track of which move box was moved on. 
-		moves.append(["Move" + str(moveDirection), MOVECOUNT])
-		moveAuto(moveDirection)
+		if !dead:
+			moves.append(["Move" + str(moveDirection), MOVECOUNT, moveDirection])
+			moveAuto(moveDirection)
+		else:
+			moves.append(["Inaction", MOVECOUNT, moveDirection])
+		print(moves)
 		MOVECOUNT = newMoveCount
 
 
@@ -157,8 +161,9 @@ func _on_moveCountChange(newMoveCount):
 
 
 func moveUp():
-	input_vector = Vector2(0, -1)
-	update_animation_parameters()
+	if !undoing:
+		input_vector = Vector2(0, -1)
+		update_animation_parameters()
 	moving = true
 	var targPos = currPos + inputs["up"] * TILE_SIZE
 	if can_move_to("up"):
@@ -167,13 +172,18 @@ func moveUp():
 		position = currPos
 	else:
 		moves.pop_back() #Gets rid of the movement appending and replaces it with inaction
-		moves.append(["Inaction", MOVECOUNT])
 		moveDirection = "right"
+		moves.append(["Inaction", MOVECOUNT, moveDirection])
+		if !undoing:
+			input_vector = Vector2(1, 0)
+			update_animation_parameters()
+
 	moving = false
 	
 func moveDown():
-	input_vector = Vector2(0, 1)
-	update_animation_parameters()
+	if !undoing:
+		input_vector = Vector2(0, 1)
+		update_animation_parameters()
 	moving = true
 	var targPos = currPos + inputs["down"] * TILE_SIZE
 	if can_move_to("down"):
@@ -182,13 +192,17 @@ func moveDown():
 		print("TRYING TO MOVE DOWN")
 	else:
 		moves.pop_back() #Gets rid of the movement appending and replaces it with inaction
-		moves.append(["Inaction", MOVECOUNT])
 		moveDirection = "left"
+		moves.append(["Inaction", MOVECOUNT, moveDirection])
+		if !undoing:
+			input_vector = Vector2(-1, 0)
+			update_animation_parameters()
 	moving = false
 	
 func moveLeft():
-	input_vector = Vector2(-1, 0)
-	update_animation_parameters()
+	if !undoing:
+		input_vector = Vector2(-1, 0)
+		update_animation_parameters()
 	moving = true
 	var targPos = currPos + inputs["left"] * TILE_SIZE
 	if can_move_to("left"):
@@ -197,13 +211,17 @@ func moveLeft():
 		print("TRYING TO MOVE LEFT")
 	else:
 		moves.pop_back() #Gets rid of the movement appending and replaces it with inaction
-		moves.append(["Inaction", MOVECOUNT])
 		moveDirection = "up"
+		moves.append(["Inaction", MOVECOUNT, moveDirection])
+		if !undoing:
+			input_vector = Vector2(0, -1)
+			update_animation_parameters()
 	moving = false
 	
 func moveRight():
-	input_vector = Vector2(1, 0)
-	update_animation_parameters()
+	if !undoing:
+		input_vector = Vector2(1, 0)
+		update_animation_parameters()
 	moving = true
 	var targPos = currPos + inputs["right"] * TILE_SIZE
 	if can_move_to("right"):
@@ -212,8 +230,11 @@ func moveRight():
 		print("TRYING TO MOVE RIGHT")
 	else:
 		moves.pop_back() #Gets rid of the movement appending and replaces it with inaction
-		moves.append(["Inaction", MOVECOUNT])
 		moveDirection = "down"
+		moves.append(["Inaction", MOVECOUNT, moveDirection])
+		if !undoing:
+			input_vector = Vector2(0, 1)
+			update_animation_parameters()
 	moving = false
 
 func moveAuto(dir):
@@ -255,7 +276,9 @@ func can_move_to(checkPos) -> bool:
 		print(collidedNode.name)
 		if collidedNode.name == "pushableBox" or collidedNode.name == "explodingBox":
 			if collidedNode.push_box(checkPos):
-				#print("Should be able to move X2")
+				print("Should be able to move X2")
+				if collidedNode.name == "explodingBox":
+					collidedNode.checkMovement()
 				return true
 		return false
 		
@@ -327,20 +350,28 @@ func undo():
 							dead = false #When exploded twice while dead this breaks...
 		
 				#MOVEMENT UNDO
-				if action[0] == "MoveUp":
-					input_vector = Vector2(0, -1)
+				if action[0] == "Moveup":
+					#input_vector = Vector2(0, -1)
+					input_vector = inputs[action[2]]
+					moveDirection = action[2]
 					moveDown()
 					
-				if action[0] == "MoveDown":
-					input_vector = Vector2(0, 1)
+				if action[0] == "Movedown":
+					#input_vector = Vector2(0, 1)
+					input_vector = inputs[action[2]]
+					moveDirection = action[2]
 					moveUp()
 					
-				if action[0] == "MoveRight":
-					input_vector = Vector2(1, 0)
+				if action[0] == "Moveright":
+					#input_vector = Vector2(1, 0)
+					input_vector = inputs[action[2]]
+					moveDirection = action[2]
 					moveLeft()
 					
-				if action[0] == "MoveLeft":
-					input_vector = Vector2(-1, 0)
+				if action[0] == "Moveleft":
+					#input_vector = Vector2(-1, 0)
+					input_vector = inputs[action[2]]
+					moveDirection = action[2]
 					moveRight()
 					
 				#PUSHED UNDO 
@@ -360,8 +391,9 @@ func undo():
 				# NO ACTION
 				if action[0] == "Inaction":
 					#Does nothing. If I want to change the logic later can change this. 
-					pass
-				
+					input_vector = inputs[action[2]]
+					
+				update_animation_parameters()
 				moves.pop_back()
 		#MOVECOUNT -= 1
 		#moveCountChange.emit(MOVECOUNT)
