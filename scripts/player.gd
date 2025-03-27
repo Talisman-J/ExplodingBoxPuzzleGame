@@ -452,11 +452,46 @@ func runCustomSolution():
 			MOVECOUNT += 1
 			moveCountChange.emit(MOVECOUNT)
 	
+var levelNum = 1
 func resetLevel():
-	get_tree().call_group("Level1", "resetLevel")
+	get_tree().call_group("Level" + str(levelNum), "resetLevel")
 	position = resetPos
 	currPos = resetPos
 	moves = []
 	moveCountChange.emit(MOVECOUNT)
 	MOVECOUNT = 0
 	dead = false
+	
+var levelPos = [0, 0]
+
+
+#Upwards levels are negative
+func _on_area_up_area_entered(area: Area2D) -> void:
+	resetPos = position
+	levelPos[1] = levelPos[1] - 1
+	checkWhereCameraIs()
+	
+#Downwards levels are positive
+func _on_area_down_area_entered(area: Area2D) -> void:
+	resetPos = position
+	levelPos[1] = levelPos[1] + 1
+	checkWhereCameraIs()
+
+#Rightwards levels are positive
+func _on_area_right_area_entered(area: Area2D) -> void:
+	resetPos = position
+	levelPos[0] = levelPos[0] + 1
+	checkWhereCameraIs()
+
+#Leftwards levels are negative
+func _on_area_left_area_entered(area: Area2D) -> void:
+	resetPos = position
+	levelPos[0] = levelPos[0] - 1
+	checkWhereCameraIs()
+	
+func checkWhereCameraIs():
+	if levelPos[0] == 0 and levelPos[1] == 0:
+		levelNum = 1
+		resetPos = Vector2(0,0)
+	if levelPos[0] == 0 and levelPos[1] == -1:
+		levelNum = 2

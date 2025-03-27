@@ -26,6 +26,7 @@ window/stretch/aspect="expand"
 
 Level1="Contains all the objects for level 1"
 Goal="Group with every goal in it."
+Level2=""
 
 [input]
 
