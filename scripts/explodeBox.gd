@@ -235,6 +235,9 @@ func can_move_to(checkPos) -> bool:
 	ray.rotation = angleDir + PI/2
 	ray.force_raycast_update()
 	
+	if undoing:
+		return true
+	
 	if !ray.is_colliding():
 		return true
 	else:
@@ -244,10 +247,10 @@ func can_move_to(checkPos) -> bool:
 				if collidedNode.push_other(checkPos):
 					return true
 			else:
-				if (collidedNode.name == "Player" or collidedNode.name == "pushableBox" or collidedNode.name == "explodingBox") and undoing: 
-					# Allows the box to move back to its original position if undoing.
-					# Otherwise, it collides with the player as the box tries to undo before the player undoes.
-					return true
+				#if (collidedNode.name == "Player" or collidedNode.name == "pushableBox" or collidedNode.name == "explodingBox") and undoing: 
+					## Allows the box to move back to its original position if undoing.
+					## Otherwise, it collides with the player as the box tries to undo before the player undoes.
+					#return true
 				if collidedNode.name == "Player": 
 					return false
 				else:
@@ -413,6 +416,13 @@ func updateExplosionTimer(num):
 				exploded = false
 				$Fire.visible = false
 				firstMove = true
+				
+				
+				var plate = $ExplodeBoxArea.get_overlapping_areas()
+				print("PLATE IS :", plate)
+				if plate.size() > 0:
+					print("THJIS RAN")
+					plate[0].area_entered.emit($ExplodeBoxArea)
 				return
 		firstMove = false
 	elif tempCountdown >= countdown:
@@ -433,6 +443,13 @@ func blowUp(): # Horrible naming scheme to have explode and blowUp in the same o
 	
 	#Change the name of this method to something else so that exploding boxes can blow up each other. 
 	if !exploded:
+		var plate = $ExplodeBoxArea.get_overlapping_areas()
+		print("PLATE IS :", plate)
+		if plate.size() > 0:
+			print("THJIS RAN")
+			plate[0].area_exited.emit($ExplodeBoxArea)
+		
+		
 		exploding = true
 		$Fire.visible = true
 		#TODO: In the future for visual effect, hold this fire and an exploding barrel for a frame until player advances next turn for visual pleasantness.
@@ -443,11 +460,13 @@ func blowUp(): # Horrible naming scheme to have explode and blowUp in the same o
 		exploded = true
 		$CollisionShape2D.disabled = true
 		
+		
+		
+		
 		var upObjects = $Fire/FireUpArea.get_overlapping_areas()
 		var downObjects = $Fire/FireDownArea.get_overlapping_areas()
 		var leftObjects = $Fire/FireLeftArea.get_overlapping_areas()
 		var rightObjects = $Fire/FireRightArea.get_overlapping_areas()
-		print(upObjects[0].get_parent())
 		
 		for i in range(0, 2, 1):
 			print("This printed")

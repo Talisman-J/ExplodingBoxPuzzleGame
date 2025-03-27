@@ -216,6 +216,8 @@ func can_move_to(checkPos) -> bool:
 	var angleDir = inputs[checkPos].angle()
 	ray.rotation = angleDir + PI/2
 	ray.force_raycast_update()
+	if undoing:
+		return true
 	
 	if !ray.is_colliding():
 		#print("Should be able to move")

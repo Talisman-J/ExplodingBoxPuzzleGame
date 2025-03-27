@@ -146,6 +146,9 @@ func can_move_to(checkPos) -> bool:
 	ray.rotation = angleDir + PI/2
 	ray.force_raycast_update()
 	
+	if undoing:
+		return true
+	
 	if !ray.is_colliding():
 		return true
 	else:
@@ -155,10 +158,10 @@ func can_move_to(checkPos) -> bool:
 				if collidedNode.push_other(checkPos):
 					return true
 			else:
-				if (collidedNode.name == "Player" or collidedNode.name == "pushableBox" or collidedNode.name == "explodingBox") and undoing: 
-					# Allows the box to move back to its original position if undoing.
-					# Otherwise, it collides with the player as the box tries to undo before the player undoes.
-					return true
+				#if (collidedNode.name == "Player" or collidedNode.name == "pushableBox" or collidedNode.name == "explodingBox") and undoing: 
+					## Allows the box to move back to its original position if undoing.
+					## Otherwise, it collides with the player as the box tries to undo before the player undoes.
+					#return true
 				if collidedNode.name == "Player": 
 					return false
 				else:
