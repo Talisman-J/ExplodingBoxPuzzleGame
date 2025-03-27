@@ -29,8 +29,12 @@ func _ready():
 	player.moveCountChange.connect(_on_moveCountChange)
 	initExplosionTimer()
 	
+var turnsSinceBlowUp = 0
+	
 func _on_moveCountChange(newMoveCount):
 	if newMoveCount <= MOVECOUNT:
+		if exploded:
+			turnsSinceBlowUp -= 1
 		# Check undo for if position is there.
 		
 		#TODO: Undo is off by one. Should make it so that increments by one in the movement function
@@ -40,6 +44,8 @@ func _on_moveCountChange(newMoveCount):
 		if hasMoved:
 			updateExplosionTimer(1)
 	else:
+		if exploded:
+			turnsSinceBlowUp += 1
 		# Update for undo to be able to keep track of which move box was moved on. 
 		MOVECOUNT = newMoveCount
 		if hasMoved:
@@ -268,7 +274,10 @@ func getListActions(num):
 			else:
 				actions.append(move)
 	return actions
-	
+
+
+var notUndoneOnExplosion = true
+
 func check_undo():
 	var actions = getListActions(MOVECOUNT)
 	if actions.is_empty():
@@ -341,6 +350,27 @@ func check_undo():
 				if action[0] == "PushLeft":
 					input_vector = Vector2(-1, 0)
 					moveRight()
+					
+				if action[0] == "BlowUp":
+					if turnsSinceBlowUp == 0:
+						print("SET THE THING TO FALSE")
+						notUndoneOnExplosion = false
+					
+					
+					
+					print("BLOW UP WAS CALLED IN UNDO")
+					self.visible = true
+					$CollisionShape2D.disabled = false
+					exploded = false
+					$Fire.visible = false
+					firstMove = true
+					
+					var plate = $ExplodeBoxArea.get_overlapping_areas()
+					if plate.size() > 0:
+						plate[0].area_entered.emit($ExplodeBoxArea)
+					#firstMove = false
+					
+					
 				moves.pop_back()
 		if MOVECOUNT > 0:
 			MOVECOUNT -= 1
@@ -394,38 +424,46 @@ func push_other(direction) -> bool:
 @export var countdown : int = 5
 @onready var tempCountdown = countdown
 @onready var resetCountdown = countdown
+@onready var textDisplay = $Label
 var firstMove = true
 func updateExplosionTimer(num):
 	# Timer variable decrements for each increment in MOVECOUNT. Increments for each decrement in MOVECOUNT. 
 	# When reaches 0, explode. Will replay exploding animation when undoing.
 	# When negative returns to 1, replace the exploding box.
-	var textDisplay = $Label
 	var prevCountdown = tempCountdown
 	tempCountdown += num
-	if exploded == true:
-		if tempCountdown >= 0:
+	#if exploded == true:
+		#if tempCountdown >= 0:
 			#TODO: There's something wrong with my undo in here and I can't figure out what it is.
 			# To replicate, get exploded. undo. get exploded again. Undo doesn't work. 
 			#print("TEMP COUNTDOWN IS:", tempCountdown)
-			if tempCountdown == 1 and firstMove == true:
-				await self.finishedVisualExplosion
-			self.visible = true
-			if tempCountdown >= 1:
-				#self.visible = true
-				$CollisionShape2D.disabled = false
-				exploded = false
-				$Fire.visible = false
-				firstMove = true
-				
-				
-				var plate = $ExplodeBoxArea.get_overlapping_areas()
-				print("PLATE IS :", plate)
-				if plate.size() > 0:
-					print("THJIS RAN")
-					plate[0].area_entered.emit($ExplodeBoxArea)
-				return
-		firstMove = false
-	elif tempCountdown >= countdown:
+			#textDisplay.text = str(tempCountdown)
+			#self.visible = true
+			#if tempCountdown >= 1:
+				##self.visible = true
+				#$CollisionShape2D.disabled = false
+				#exploded = false
+				#$Fire.visible = false
+				#firstMove = true
+				#
+				#
+				#var plate = $ExplodeBoxArea.get_overlapping_areas()
+				#print("PLATE IS :", plate)
+				#if plate.size() > 0:
+					#print("THJIS RAN")
+					#plate[0].area_entered.emit($ExplodeBoxArea)
+				#return
+		#firstMove = false
+	if tempCountdown < 0:
+		self.visible = false
+	if tempCountdown == 0:
+		self.visible = true
+		$Fire.visible = true
+	if tempCountdown > 0:
+		$Fire.visible = false
+		
+		
+	if tempCountdown >= countdown:
 		tempCountdown = countdown
 		hasMoved = false
 	textDisplay.text = str(tempCountdown)
@@ -443,10 +481,11 @@ func blowUp(): # Horrible naming scheme to have explode and blowUp in the same o
 	
 	#Change the name of this method to something else so that exploding boxes can blow up each other. 
 	if !exploded:
+		moves.append(["BlowUp", MOVECOUNT - 1])
 		var plate = $ExplodeBoxArea.get_overlapping_areas()
 		print("PLATE IS :", plate)
 		if plate.size() > 0:
-			print("THJIS RAN")
+			print("THIS RAN")
 			plate[0].area_exited.emit($ExplodeBoxArea)
 		
 		
@@ -479,8 +518,13 @@ func blowUp(): # Horrible naming scheme to have explode and blowUp in the same o
 			if leftObjects.size() > i:
 				leftObjects[i].get_parent().explode("left")
 		await player.moveCountChange #Errors when undoing. 
-		self.visible = false
+		#print(notUndoneOnExplosion)
+		#if notUndoneOnExplosion:
+			#print("SHOULD VE INVISIBLE")
+			#self.visible = false
 		exploding = false
+		#notUndoneOnExplosion = true
+		
 		
 		
 		

@@ -232,6 +232,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="Player" parent="." instance=ExtResource("2_lnu2h")]
+position = Vector2(224, 32)
 
 [node name="TileMapLayerWalls" type="TileMapLayer" parent="."]
 show_behind_parent = true
@@ -513,7 +514,7 @@ position = Vector2(32, 0)
 [node name="Level3ExitWallExplode" type="Node" parent="AllLevels/Level10"]
 
 [node name="Goal" parent="." instance=ExtResource("12_dinhu")]
-position = Vector2(288, -16)
+position = Vector2(176, 80)
 
 [node name="Goal2" parent="." instance=ExtResource("12_dinhu")]
 position = Vector2(304, -16)
