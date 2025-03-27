@@ -1,7 +1,7 @@
 class_name PushBox
 extends CharacterBody2D
 
-#var currPos = Vector2(0, 0)
+
 var currPos = position
 var resetPos = position
 var input_vector = Vector2.ZERO
@@ -44,60 +44,32 @@ func push_box(direction) -> bool:
 		return didMove # Prevent new movement until done with current one
 	if didMove == true:
 		didMove = false
+	
 	# Only react to key presses (no continuous movement)
 	if direction == "right":
 		input_vector = Vector2(1, 0)
 		if moveRight():
-			print("BOX IS PUSHED ON THIS TURN")
 			moves.append(["MoveRight", MOVECOUNT])
 			didMove = true
 	elif direction == "left":
 		input_vector = Vector2(-1, 0)
 		if moveLeft():
-			print("BOX IS PUSHED ON THIS TURN")
 			moves.append(["MoveLeft", MOVECOUNT])
 			didMove = true
 	elif direction == "up":
 		input_vector = Vector2(0, -1)
 		if moveUp():
-			print("BOX IS PUSHED ON THIS TURN")
 			moves.append(["MoveUp", MOVECOUNT])
 			didMove = true
 	elif direction == "down":
 		input_vector = Vector2(0, 1)
 		if moveDown():
-			print("BOX IS PUSHED ON THIS TURN")
 			moves.append(["MoveDown", MOVECOUNT])
 			didMove = true
 	else:
-		print("NOTHING HAPPENED TO BOX")
 		didMove = false
-	print("PUSH BOX IS RUN HERE")
 	return didMove
 
-#Handles if the box is pushed during an explosion
-#func push_other(direction) -> bool:
-	#if moving:
-		#return didMove # Prevent new movement until done with current one
-	#gettingPushed = true
-	#moves.append([position, MOVECOUNT - 1])
-	## Only react to key presses (no continuous movement)
-	#if direction == "right":
-		#input_vector = Vector2(1, 0)
-		##attempt_move("right")
-	#elif direction == "left":
-		#input_vector = Vector2(-1, 0)
-		##attempt_move("left")
-	#elif direction == "up":
-		#input_vector = Vector2(0, -1)
-		##attempt_move("up")
-	#elif direction == "down":
-		#input_vector = Vector2(0, 1)
-		##attempt_move("down")
-	#gettingPushed = false
-	#print("PUSH OTHER IS RUN HERE")
-	##moves.append([position, MOVECOUNT])
-	#return didMove
 
 func moveUp():
 	moving = true
@@ -108,9 +80,10 @@ func moveUp():
 		moving = false
 		return true
 	else:
+		moving = false
 		return false
-		
-	
+
+
 func moveDown():
 	moving = true
 	var targPos = currPos + inputs["down"] * TILE_SIZE
@@ -120,6 +93,7 @@ func moveDown():
 		moving = false
 		return true
 	else:
+		moving = false
 		return false
 	
 	
@@ -132,6 +106,7 @@ func moveLeft():
 		moving = false
 		return true
 	else:
+		moving = false
 		return false
 
 	
@@ -144,8 +119,9 @@ func moveRight():
 		moving = false
 		return true
 	else:
+		moving = false
 		return false
-	
+
 
 func moveAuto(dir):
 	if(dir == "up"):
@@ -158,14 +134,13 @@ func moveAuto(dir):
 		moveRight()
 
 
-
 var inputs = {
 	"right": Vector2.RIGHT,
 	"left": Vector2.LEFT,
 	"up": Vector2.UP,
 	"down": Vector2.DOWN}
-	
-	
+
+
 func can_move_to(checkPos) -> bool:
 	var angleDir = inputs[checkPos].angle()
 	ray.rotation = angleDir + PI/2
@@ -191,31 +166,8 @@ func can_move_to(checkPos) -> bool:
 						return true
 		return false
 
-
-#For undo keep track of a global moveCount variable.
-#Whenever box is moved, add vector new pos and moveCount to 2D array
-#For each time moveCount decrements (using signals), check if == to stored moveCount. 
-#If so: pop_back and move box to new back (next newest move). 
-
-#This way it stores only the necessary stuff and only calls it when necessary to hopefully be at least somewhat efficient. 
-
-#func check_undo():
-	##print("Size of moves is: ", moves.size())
-	#if moves.size() > 0:
-		#var currListItem = moves.get(moves.size() - 1)
-		##print("OUTSIDE the if statement: ",currListItem.get(1))
-		#if (MOVECOUNT - 1) == currListItem.get(1):
-			##print("Inside the if statement: ",currListItem.get(1))
-			#moves.pop_back()
-			#currPos = currListItem.get(0)
-			#self.position += (currPos - position)
-	#if moves.size() == 0:
-		#currPos = initPos
-		#self.position = initPos
-
 func getListActions(num):
 	var actions = []
-	#print("THIS IS CALLED WITH THE NUMBER: ", num - 1)
 	for move in moves:
 		if move.get(1) == (num - 1):
 			if move.get(0) == "Explode":
@@ -237,7 +189,6 @@ func check_undo():
 			if moves.size() > 0:
 				# Get each action for current MOVECOUNT. Loop through them. Will avoid the weird jank especially when not having an "Inactive" signal. 
 				# Also means multiple events can happen at once.
-				#print("TRYING TO UNDO THE ACTION: ", action[0])
 				#Undo Explosion
 				if action[0] == "Explode":
 					if action[3] == "up":
@@ -304,33 +255,7 @@ func check_undo():
 	undoing = false
 
 func explode(dir):
-	#exploding = true
-	#print(dir)
-	#if moves.size() <= 0:
-		#moves.append([position, MOVECOUNT - 1])
-	#if moves.size() > 0:
-		#var lastElement = moves[moves.size() - 1]
-		#if lastElement.get(1) != MOVECOUNT - 1:
-			#moves.append([position, MOVECOUNT - 1])
-	#
-	##print("Before explosion: ", MOVECOUNT - 1, " Movecount and ", position, " Position" )
-	#push_box(dir)
-	#if worked == true:
-		#moves.pop_back()
-	#push_box(dir)
-	#if worked == true:
-		#moves.pop_back()
-	##print(MOVECOUNT, " Movecount and ", position, " Position" )
-	#print("Box Blew UP")
-	#
-	#exploding = false
-	#reference instance at countdown of 1 instead of 0. Return to 1 when countdown returns to 1
-	#print("EXPLODED ON MOVE: ", MOVECOUNT)
 	exploding = true
-	#dead = true
-	#exploded = true
-
-	
 	var distance = 0
 	if can_move_to(dir):
 		moveAuto(dir)
@@ -338,18 +263,11 @@ func explode(dir):
 	if can_move_to(dir):
 		moveAuto(dir)
 		distance += 1
-	#print("Explode" + dir)
-	#print(distance)
 	moves.append(["Explode", MOVECOUNT - 1, distance, dir])
 	
 	exploding = false
-	
-	#ISSUE HERE:
-	#Saves the position of before explosion and after on the same turn. 
-	#Have a prepare signal that sends warning at countdown of 1 and saves. 
-	
-	
-	
+
+
 func push_other(direction) -> bool:
 	if moving:
 		return didMove # Prevent new movement until done with current one
@@ -373,11 +291,6 @@ func push_other(direction) -> bool:
 	gettingPushed = false
 	return didMove
 	
-#func _unhandled_input(event):
-	#if event.is_action_pressed("ResetLevel"):
-		## "r"
-		#resetLevel()
-		
 func resetLevel():
 	print("BOX RESET LEVEL IS CALLED")
 	position = resetPos

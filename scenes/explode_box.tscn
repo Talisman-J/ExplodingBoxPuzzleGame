@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://2qbsfxti0leb"]
+[gd_scene load_steps=7 format=3 uid="uid://2qbsfxti0leb"]
 
 [ext_resource type="Script" uid="uid://b0kel6566h4ks" path="res://scripts/explodeBox.gd" id="1_d5wfv"]
 [ext_resource type="Texture2D" uid="uid://cxn0k05mgd62y" path="res://assets/SciAssets/SciSpriteSheet.png" id="2_h6g1i"]
@@ -8,6 +8,9 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h6g1i"]
 size = Vector2(10, 21)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_68404"]
+size = Vector2(10, 10)
 
 [node name="ExplodeBox" type="Node2D"]
 
@@ -122,6 +125,12 @@ rotation = 1.5708
 texture = ExtResource("3_h6g1i")
 region_enabled = true
 region_rect = Rect2(32, 32, 32, 16)
+
+[node name="ExplodeBoxArea" type="Area2D" parent="explodingBox"]
+
+[node name="ExplodeBoxAreaColl" type="CollisionShape2D" parent="explodingBox/ExplodeBoxArea"]
+shape = SubResource("RectangleShape2D_68404")
+debug_color = Color(0.547023, 0.40472, 0.9973, 0.42)
 
 [connection signal="area_entered" from="explodingBox/Fire/FireUpArea" to="explodingBox" method="_on_fire_up_area_area_entered"]
 [connection signal="area_entered" from="explodingBox/Fire/FireDownArea" to="explodingBox" method="_on_fire_down_area_area_entered"]

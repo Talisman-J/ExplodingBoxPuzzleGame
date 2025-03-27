@@ -425,6 +425,9 @@ position = Vector2(0, 48)
 [node name="Boxes3" parent="AllLevels/Level3/Level3ExplodeBox/ExplodeBox2" instance=ExtResource("3_lnu2h")]
 position = Vector2(32, 0)
 
+[node name="ExplodeBox" parent="AllLevels/Level3/Level3ExplodeBox/ExplodeBox2" instance=ExtResource("4_p57ef")]
+position = Vector2(-48, -16)
+
 [node name="Level3WallExplode" type="Node" parent="AllLevels/Level3"]
 
 [node name="Level3ExitWallExplode" type="Node" parent="AllLevels/Level3"]
