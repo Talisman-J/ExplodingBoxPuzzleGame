@@ -1,9 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://cmci153vr4utt"]
+[gd_scene load_steps=5 format=3 uid="uid://cmci153vr4utt"]
 
 [ext_resource type="Script" uid="uid://dbudygrmr7xxi" path="res://scripts/explodeWall.gd" id="1_xtk2f"]
 [ext_resource type="Texture2D" uid="uid://cxn0k05mgd62y" path="res://assets/SciAssets/SciSpriteSheet.png" id="2_wvwin"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_iywne"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xtk2f"]
+size = Vector2(10, 10)
 
 [node name="ExplodeWall" type="Node2D"]
 
@@ -20,3 +23,10 @@ region_rect = Rect2(80, 64, 16, 16)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExplodableWall"]
 scale = Vector2(0.7, 0.7)
 shape = SubResource("RectangleShape2D_iywne")
+
+[node name="WallArea" type="Area2D" parent="ExplodableWall"]
+collision_layer = 128
+
+[node name="WallAreaColl" type="CollisionShape2D" parent="ExplodableWall/WallArea"]
+shape = SubResource("RectangleShape2D_xtk2f")
+debug_color = Color(0.85358, 0.184418, 0.784005, 0.42)
