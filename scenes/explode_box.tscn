@@ -83,7 +83,7 @@ region_rect = Rect2(32, 32, 32, 16)
 [node name="FireUpArea" type="Area2D" parent="explodingBox/Fire"]
 position = Vector2(0, -16)
 collision_layer = 0
-collision_mask = 129
+collision_mask = 2147483777
 
 [node name="FireUpColl" type="CollisionShape2D" parent="explodingBox/Fire/FireUpArea"]
 position = Vector2(0, -5.5)
@@ -94,7 +94,7 @@ debug_color = Color(0.97251, 0.106286, 0.326916, 0.42)
 position = Vector2(0, 16)
 rotation = 3.14159
 collision_layer = 0
-collision_mask = 129
+collision_mask = 2147483777
 
 [node name="FireDownColl" type="CollisionShape2D" parent="explodingBox/Fire/FireDownArea"]
 position = Vector2(0, -5.5)
@@ -105,7 +105,7 @@ debug_color = Color(0.97251, 0.106286, 0.326916, 0.42)
 position = Vector2(16, 0)
 rotation = 1.5708
 collision_layer = 0
-collision_mask = 129
+collision_mask = 2147483777
 
 [node name="FireRightColl" type="CollisionShape2D" parent="explodingBox/Fire/FireRightArea"]
 position = Vector2(0, -5.5)
@@ -116,7 +116,7 @@ debug_color = Color(0.97251, 0.106286, 0.326916, 0.42)
 position = Vector2(-16, 0)
 rotation = -1.5708
 collision_layer = 0
-collision_mask = 129
+collision_mask = 2147483777
 
 [node name="FireLeftColl" type="CollisionShape2D" parent="explodingBox/Fire/FireLeftArea"]
 position = Vector2(0, -5.5)

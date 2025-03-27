@@ -377,6 +377,7 @@ func check_undo():
 	undoing = false
 
 func explode(dir):
+	print("THIS SHOULD EXPLODE")
 	exploding = true
 	hasMoved = true
 	var distance = 0
@@ -506,6 +507,7 @@ func blowUp(): # Horrible naming scheme to have explode and blowUp in the same o
 		var downObjects = $Fire/FireDownArea.get_overlapping_areas()
 		var leftObjects = $Fire/FireLeftArea.get_overlapping_areas()
 		var rightObjects = $Fire/FireRightArea.get_overlapping_areas()
+		
 		
 		for i in range(0, 2, 1):
 			print("This printed")
