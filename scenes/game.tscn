@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=4 uid="uid://c4xmotgopwct"]
+[gd_scene load_steps=20 format=4 uid="uid://c4xmotgopwct"]
 
 [ext_resource type="Script" uid="uid://c3vwc6w5nc0qk" path="res://scripts/main.gd" id="1_yqjtg"]
 [ext_resource type="Script" uid="uid://ditp8ftbse1xk" path="res://scripts/camera.gd" id="2_gee14"]
@@ -12,7 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://qnsmk1pxeatd" path="res://scenes/exit_explode_wall.tscn" id="10_kvpfn"]
 [ext_resource type="PackedScene" uid="uid://be5q8a6638q5j" path="res://scenes/door_and_plate.tscn" id="10_vtaks"]
 [ext_resource type="PackedScene" uid="uid://baph16fqb1sye" path="res://scenes/goal.tscn" id="12_dinhu"]
-[ext_resource type="Script" uid="uid://bddn4kjrfoajv" path="res://scripts/enemyGoat.gd" id="13_trtic"]
+[ext_resource type="PackedScene" uid="uid://civcj11px1nbx" path="res://scenes/goat.tscn" id="13_kvuet"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_u5sy4"]
 size = Vector2(432, 9.90099)
@@ -175,129 +175,6 @@ physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_iywne")
 sources/1 = SubResource("TileSetAtlasSource_0tnpc")
 sources/2 = SubResource("TileSetAtlasSource_dinhu")
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_pl11u"]
-size = Vector2(10, 10)
-
-[sub_resource type="Animation" id="Animation_kvuet"]
-resource_name = "goat_idle_up"
-length = 0.3
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("GoatCharacter:frame_coords")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector2i(2, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_trtic"]
-length = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("GoatCharacter:frame_coords")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector2i(2, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_ir15t"]
-resource_name = "goat_idle_down"
-length = 0.3
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("GoatCharacter:frame_coords")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector2i(1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_ca42v"]
-resource_name = "goat_idle_right"
-length = 0.3
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("GoatCharacter:frame_coords")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector2i(2, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_rysoc"]
-resource_name = "goat_idle_left"
-length = 0.3
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("GoatCharacter:frame_coords")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector2i(1, 0)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_ssvqc"]
-_data = {
-&"RESET": SubResource("Animation_trtic"),
-&"goat_idle_down": SubResource("Animation_ir15t"),
-&"goat_idle_left": SubResource("Animation_rysoc"),
-&"goat_idle_right": SubResource("Animation_ca42v"),
-&"goat_idle_up": SubResource("Animation_kvuet")
-}
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kvuet"]
-animation = &"goat_idle_down"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_trtic"]
-animation = &"goat_idle_right"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ir15t"]
-animation = &"goat_idle_up"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ca42v"]
-animation = &"goat_idle_left"
-
-[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_rysoc"]
-blend_point_0/node = SubResource("AnimationNodeAnimation_kvuet")
-blend_point_0/pos = Vector2(0, 1)
-blend_point_1/node = SubResource("AnimationNodeAnimation_trtic")
-blend_point_1/pos = Vector2(1, 0)
-blend_point_2/node = SubResource("AnimationNodeAnimation_ir15t")
-blend_point_2/pos = Vector2(0, -0.8)
-blend_point_3/node = SubResource("AnimationNodeAnimation_ca42v")
-blend_point_3/pos = Vector2(-1, 0.1)
-blend_mode = 1
-
-[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_ssvqc"]
-states/GoatIdle/node = SubResource("AnimationNodeBlendSpace2D_rysoc")
-states/GoatIdle/position = Vector2(343, 94)
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_yqjtg")
@@ -690,40 +567,12 @@ position = Vector2(464, 48)
 [node name="explodingBox" parent="ExplodeBox2" index="0"]
 countdown = 3
 
-[node name="Goat" type="Node2D" parent="."]
+[node name="Goat" parent="." instance=ExtResource("13_kvuet")]
 position = Vector2(-160, 48)
-script = ExtResource("13_trtic")
 
-[node name="GoatCharacter" type="Sprite2D" parent="Goat"]
-scale = Vector2(1.1, 1.1)
-texture = ExtResource("5_iywne")
-offset = Vector2(0, -4)
-hframes = 4
-vframes = 2
-frame = 6
-region_enabled = true
-region_rect = Rect2(0, 80, 64, 32)
-
-[node name="RayCast2D" type="RayCast2D" parent="Goat"]
-target_position = Vector2(0, -16)
-collision_mask = 15
-collide_with_areas = true
-
-[node name="PlayerArea" type="Area2D" parent="Goat"]
-
-[node name="CamCollider" type="CollisionShape2D" parent="Goat/PlayerArea"]
-shape = SubResource("RectangleShape2D_pl11u")
-debug_color = Color(0.797039, 0.249487, 0.84479, 0.42)
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Goat"]
-libraries = {
-&"": SubResource("AnimationLibrary_ssvqc")
-}
-
-[node name="AnimationTree" type="AnimationTree" parent="Goat"]
-tree_root = SubResource("AnimationNodeStateMachine_ssvqc")
-anim_player = NodePath("../AnimationPlayer")
-parameters/GoatIdle/blend_position = Vector2(-0.993143, 0.00714278)
+[node name="Goat2" parent="." instance=ExtResource("13_kvuet")]
+position = Vector2(-64, 48)
+moveDirection = "left"
 
 [connection signal="area_entered" from="Camera2D/AreaUp" to="Camera2D" method="_on_area_up_area_entered"]
 [connection signal="area_entered" from="Camera2D/AreaUp" to="Player" method="_on_area_up_area_entered"]
@@ -762,3 +611,5 @@ parameters/GoatIdle/blend_position = Vector2(-0.993143, 0.00714278)
 [editable path="DoorAndPlate2"]
 [editable path="ExplodeBox"]
 [editable path="ExplodeBox2"]
+[editable path="Goat"]
+[editable path="Goat2"]

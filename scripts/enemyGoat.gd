@@ -8,7 +8,7 @@ var resetPos: Vector2 = position
 var input_vector = Vector2.DOWN
 var moving : bool = false # To lock movement until reaching tile
 var moves: Array = [] # Holds the move name and Movecount
-static var MOVECOUNT : int = 0
+var MOVECOUNT : int = 0
 var exploding = false
 var gettingPushed = false
 var dead : bool = false
@@ -51,11 +51,13 @@ var inputs = {
 	"down": Vector2.DOWN,
 	"left": Vector2.LEFT,
 	"up": Vector2.UP}
-var moveDirection = "up"
+@export var moveDirection = "up"
 
 @onready var player = get_node("/root/Main/Player")
 func _ready():
 	player.moveCountChange.connect(_on_moveCountChange)
+	input_vector = inputs[moveDirection]
+	update_animation_parameters()
 	
 	
 func _on_moveCountChange(newMoveCount):
