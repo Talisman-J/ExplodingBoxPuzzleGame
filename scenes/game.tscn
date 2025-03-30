@@ -233,6 +233,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="Player" parent="." instance=ExtResource("2_lnu2h")]
+position = Vector2(64, -96)
 
 [node name="TileMapLayerWalls" type="TileMapLayer" parent="."]
 show_behind_parent = true
@@ -567,12 +568,8 @@ position = Vector2(464, 48)
 [node name="explodingBox" parent="ExplodeBox2" index="0"]
 countdown = 3
 
-[node name="Goat" parent="." instance=ExtResource("13_kvuet")]
-position = Vector2(-160, 48)
-
-[node name="Goat2" parent="." instance=ExtResource("13_kvuet")]
-position = Vector2(-64, 48)
-moveDirection = "left"
+[node name="Goat3" parent="." instance=ExtResource("13_kvuet")]
+position = Vector2(128, -112)
 
 [connection signal="area_entered" from="Camera2D/AreaUp" to="Camera2D" method="_on_area_up_area_entered"]
 [connection signal="area_entered" from="Camera2D/AreaUp" to="Player" method="_on_area_up_area_entered"]
@@ -611,5 +608,3 @@ moveDirection = "left"
 [editable path="DoorAndPlate2"]
 [editable path="ExplodeBox"]
 [editable path="ExplodeBox2"]
-[editable path="Goat"]
-[editable path="Goat2"]

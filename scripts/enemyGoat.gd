@@ -280,8 +280,11 @@ func can_move_to(checkPos) -> bool:
 			if collidedNode.push_box(checkPos):
 				print("Should be able to move X2")
 				if collidedNode.name == "explodingBox":
-					collidedNode.checkMovement()
+					print("TRIED TO CHECK MOVEMENT")
+					#collidedNode.checkMovement()
 				return true
+			#if collidedNode.name == "explodingBox":
+				#collidedNode.checkMovement()
 		return false
 		
 		

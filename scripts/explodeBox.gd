@@ -15,6 +15,8 @@ var exploding = false
 var undoing = false
 var gettingPushed = false
 
+var updatingMoveCount = false
+
 
 var MOVECOUNT : int = 0
 
@@ -32,6 +34,7 @@ func _ready():
 var turnsSinceBlowUp = 0
 	
 func _on_moveCountChange(newMoveCount):
+	updatingMoveCount = true
 	if newMoveCount <= MOVECOUNT:
 		if exploded:
 			turnsSinceBlowUp -= 1
@@ -50,21 +53,20 @@ func _on_moveCountChange(newMoveCount):
 		MOVECOUNT = newMoveCount
 		if hasMoved:
 			updateExplosionTimer(-1)
+	updatingMoveCount = false
 
 func checkMovement():
-	print("The current box moves are: ", moves)
 	if hasMoved:
-		updateExplosionTimer(-1)
 		moves.get(moves.size() - 1)[1] = moves.get(moves.size() - 1)[1] - 1
-		print("The new box moves are: ", moves)
+		print("WITHIN THE CHECKMOVEMENT: ", moves)
+		if !timerStarted:
+			updateExplosionTimer(-1)
+		
 		
 
 func push_box(direction) -> bool:
 	print("hasMoved should be true here")
 	hasMoved = true
-	
-	
-	
 	if moving:
 		return didMove # Prevent new movement until done with current one
 	if didMove == true:
@@ -77,23 +79,38 @@ func push_box(direction) -> bool:
 			moves.append(["MoveRight", MOVECOUNT])
 			didMove = true
 			print("MOVED TO THE RIGHT")
+			
+		else:
+			moves.append(["Inaction", MOVECOUNT])
 	elif direction == "left":
 		input_vector = Vector2(-1, 0)
 		if moveLeft():
 			moves.append(["MoveLeft", MOVECOUNT])
 			didMove = true
+			
+		else:
+			moves.append(["Inaction", MOVECOUNT])
 	elif direction == "up":
 		input_vector = Vector2(0, -1)
 		if moveUp():
 			moves.append(["MoveUp", MOVECOUNT])
 			didMove = true
+		
+		else:
+			moves.append(["Inaction", MOVECOUNT])
 	elif direction == "down":
 		input_vector = Vector2(0, 1)
 		if moveDown():
 			moves.append(["MoveDown", MOVECOUNT])
 			didMove = true
+		
+		else:
+			moves.append(["Inaction", MOVECOUNT])
 	else:
 		didMove = false
+		moves.append(["Inaction", MOVECOUNT])
+	if !updatingMoveCount:
+		checkMovement()
 	return didMove
 
 
@@ -358,11 +375,13 @@ func push_other(direction) -> bool:
 @onready var resetCountdown = countdown
 @onready var textDisplay = $Label
 var firstMove = true
+var timerStarted = false
 
 func updateExplosionTimer(num):
 	# Timer variable decrements for each increment in MOVECOUNT. Increments for each decrement in MOVECOUNT. 
 	# When reaches 0, explode. Will replay exploding animation when undoing.
 	# When negative returns to 1, replace the exploding box.
+	timerStarted = true
 	var prevCountdown = tempCountdown
 	tempCountdown += num
 	
@@ -379,6 +398,7 @@ func updateExplosionTimer(num):
 	if tempCountdown >= countdown:
 		tempCountdown = countdown
 		hasMoved = false
+		timerStarted = false
 	textDisplay.text = str(tempCountdown)
 	if prevCountdown > 0 and tempCountdown == 0:
 		blowUp()

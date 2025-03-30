@@ -1,0 +1,161 @@
+[gd_scene load_steps=16 format=3 uid="uid://civcj11px1nbx"]
+
+[ext_resource type="Script" uid="uid://bddn4kjrfoajv" path="res://scripts/enemyGoat.gd" id="1_er772"]
+[ext_resource type="Texture2D" uid="uid://cxn0k05mgd62y" path="res://assets/SciAssets/SciSpriteSheet.png" id="2_nlybf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pl11u"]
+size = Vector2(10, 10)
+
+[sub_resource type="Animation" id="Animation_trtic"]
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GoatCharacter:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(2, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_ir15t"]
+resource_name = "goat_idle_down"
+length = 0.3
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GoatCharacter:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_rysoc"]
+resource_name = "goat_idle_left"
+length = 0.3
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GoatCharacter:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ca42v"]
+resource_name = "goat_idle_right"
+length = 0.3
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GoatCharacter:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(2, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_kvuet"]
+resource_name = "goat_idle_up"
+length = 0.3
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GoatCharacter:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(2, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ssvqc"]
+_data = {
+&"RESET": SubResource("Animation_trtic"),
+&"goat_idle_down": SubResource("Animation_ir15t"),
+&"goat_idle_left": SubResource("Animation_rysoc"),
+&"goat_idle_right": SubResource("Animation_ca42v"),
+&"goat_idle_up": SubResource("Animation_kvuet")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kvuet"]
+animation = &"goat_idle_down"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_trtic"]
+animation = &"goat_idle_right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ir15t"]
+animation = &"goat_idle_up"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ca42v"]
+animation = &"goat_idle_left"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_rysoc"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_kvuet")
+blend_point_0/pos = Vector2(0, 1)
+blend_point_1/node = SubResource("AnimationNodeAnimation_trtic")
+blend_point_1/pos = Vector2(1, 0)
+blend_point_2/node = SubResource("AnimationNodeAnimation_ir15t")
+blend_point_2/pos = Vector2(0, -0.8)
+blend_point_3/node = SubResource("AnimationNodeAnimation_ca42v")
+blend_point_3/pos = Vector2(-1, 0.1)
+blend_mode = 1
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_ssvqc"]
+states/GoatIdle/node = SubResource("AnimationNodeBlendSpace2D_rysoc")
+states/GoatIdle/position = Vector2(343, 94)
+
+[node name="Goat" type="Node2D"]
+script = ExtResource("1_er772")
+
+[node name="GoatCharacter" type="Sprite2D" parent="."]
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("2_nlybf")
+offset = Vector2(0, -4)
+hframes = 4
+vframes = 2
+frame = 6
+region_enabled = true
+region_rect = Rect2(0, 80, 64, 32)
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+target_position = Vector2(0, -16)
+collision_mask = 15
+collide_with_areas = true
+
+[node name="PlayerArea" type="Area2D" parent="."]
+
+[node name="CamCollider" type="CollisionShape2D" parent="PlayerArea"]
+shape = SubResource("RectangleShape2D_pl11u")
+debug_color = Color(0.797039, 0.249487, 0.84479, 0.42)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_ssvqc")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_ssvqc")
+anim_player = NodePath("../AnimationPlayer")
+parameters/GoatIdle/blend_position = Vector2(-0.993143, 0.00714278)
