@@ -277,6 +277,10 @@ func can_move_to(checkPos) -> bool:
 		var collidedNode = ray.get_collider()
 		print(collidedNode.name)
 		if collidedNode.name == "pushableBox" or collidedNode.name == "explodingBox":
+			if collidedNode.name == "explodingBox":
+				collidedNode.pushedByGoat = true
+				if collidedNode.push_box(checkPos):
+					return true
 			if collidedNode.push_box(checkPos):
 				return true
 		elif collidedNode.name == "Player":

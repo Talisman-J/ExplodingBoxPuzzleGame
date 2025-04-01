@@ -19,6 +19,7 @@ var updatingMoveCount = false
 
 
 var MOVECOUNT : int = 0
+var pushedByGoat = false
 
 
 @onready var player = get_node("/root/Main/Player")
@@ -58,7 +59,8 @@ func _on_moveCountChange(newMoveCount):
 func checkMovement():
 	if hasMoved:
 		moves.get(moves.size() - 1)[1] = moves.get(moves.size() - 1)[1] - 1
-		if !timerStarted:
+		if !timerStarted and pushedByGoat:
+			print("Player broke this")
 			updateExplosionTimer(-1)
 		
 		
@@ -110,6 +112,7 @@ func push_box(direction) -> bool:
 		moves.append(["Inaction", MOVECOUNT])
 	if !updatingMoveCount:
 		checkMovement()
+	pushedByGoat = false
 	return didMove
 
 
