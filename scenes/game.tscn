@@ -416,7 +416,7 @@ position = Vector2(160, -208)
 position = Vector2(128, -208)
 
 [node name="explodingBox" parent="AllLevels/Level2/Level2ExplodeBox/ExplodeBox" index="0" groups=["Level2"]]
-countdown = 3
+countdown = 4
 
 [node name="Level2WallExplode" type="Node" parent="AllLevels/Level2"]
 

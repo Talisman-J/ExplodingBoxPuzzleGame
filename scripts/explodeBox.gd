@@ -58,7 +58,6 @@ func _on_moveCountChange(newMoveCount):
 func checkMovement():
 	if hasMoved:
 		moves.get(moves.size() - 1)[1] = moves.get(moves.size() - 1)[1] - 1
-		print("WITHIN THE CHECKMOVEMENT: ", moves)
 		if !timerStarted:
 			updateExplosionTimer(-1)
 		
